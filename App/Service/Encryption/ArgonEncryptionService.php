@@ -19,7 +19,7 @@ class ArgonEncryptionService implements EncryptionServiceInterface
      * @param string $passwordString
      * @return bool
      */
-    public function isValid(string $passwordHash, string $passwordString): bool
+    public function isValid(string $passwordString, string $passwordHash): bool
     {
         return password_verify($passwordString, $passwordHash);
     }

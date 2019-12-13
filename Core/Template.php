@@ -14,6 +14,7 @@ class Template implements TemplateInterface
     {
         require_once
             self::TEMPLATE_FOLDER
+            . DIRECTORY_SEPARATOR
             . $templateName
             . self::TEMPLATE_EXTENSION;
     }

@@ -19,7 +19,7 @@ interface UserRepositoryInterface
      * @param UserDTO $userDTO
      * @return bool
      */
-    public function update(int $id, UserDTO $userDTO): bool;
+    public function updateProfile(int $id, UserDTO $userDTO): bool;
 
     /**
      * @param int $id

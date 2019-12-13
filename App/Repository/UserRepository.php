@@ -36,7 +36,7 @@ class UserRepository implements UserRepositoryInterface
                 $userDTO->getLastName(),
                 $userDTO->getEmail(),
                 $userDTO->getPassword(),
-                $userDTO->isActive(),
+                (int)$userDTO->isActive(), //mysql converts this to string, so if not int false is ''
             ]
         );
 
@@ -46,7 +46,7 @@ class UserRepository implements UserRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function update(int $id, UserDTO $userDTO): bool
+    public function updateProfile(int $id, UserDTO $userDTO): bool
     {
         $this->db->query(
             "
@@ -54,17 +54,13 @@ class UserRepository implements UserRepositoryInterface
                 SET 
                     first_name = ?,
                     last_name = ?,
-                    email = ?, 
-                    password = ?,
-                    active = ? 
+                    email = ? 
                 WHERE id = ?
             "
         )->execute([
             $userDTO->getFirstName(),
             $userDTO->getLastName(),
             $userDTO->getEmail(),
-            $userDTO->getPassword(),
-            $userDTO->isActive(),
             $id
         ]);
 
@@ -92,7 +88,12 @@ class UserRepository implements UserRepositoryInterface
     {
         return $this->db->query(
             "
-                        SELECT id, first_name, last_name, email, password, active 
+                        SELECT id, 
+                                first_name as firstName, 
+                                last_name as lastName, 
+                                email, 
+                                password, 
+                                active 
                         FROM users
                         WHERE id = ?
                 "
@@ -106,7 +107,12 @@ class UserRepository implements UserRepositoryInterface
     {
         return $this->db->query(
                 "
-                        SELECT id, first_name, last_name, email, password, active 
+                        SELECT id, 
+                                first_name as firstName, 
+                                last_name lastName, 
+                                email, 
+                                password, 
+                                active 
                         FROM users
                         WHERE email = ?
                 "
@@ -122,7 +128,12 @@ class UserRepository implements UserRepositoryInterface
     {
         return $this->db->query(
             "
-                        SELECT id, first_name, last_name, email, password, active 
+                        SELECT id, 
+                                first_name as firstName, 
+                                last_name as lastName, 
+                                email, 
+                                password, 
+                                active 
                         FROM users
                 "
         )->execute()

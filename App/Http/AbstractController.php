@@ -6,7 +6,7 @@ namespace App\Http;
 
 use Core\TemplateInterface;
 
-abstract class MainController
+abstract class AbstractController
 {
     /**
      * @var TemplateInterface

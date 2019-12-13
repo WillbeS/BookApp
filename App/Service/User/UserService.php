@@ -54,7 +54,13 @@ class UserService implements UserServiceInterface
      */
     public function login(string $email, string $password): ?UserDTO
     {
-        // TODO: Implement login() method.
+        $userDto = $this->userRepository->findByEmail($email);
+
+        if (null === $userDto || !$this->encryptionService->isValid($password, $userDto->getPassword())) {
+            return null;
+        }
+
+        return $userDto;
     }
 
     /**
@@ -62,7 +68,7 @@ class UserService implements UserServiceInterface
      */
     public function edit(UserDTO $userDTO): bool
     {
-        // TODO: Implement edit() method.
+        return $this->userRepository->updateProfile($userDTO->getId(), $userDTO);
     }
 
     /**
@@ -70,7 +76,11 @@ class UserService implements UserServiceInterface
      */
     public function getCurrentUser(): ?UserDTO
     {
-        // TODO: Implement getCurrentUser() method.
+        if (!isset($_SESSION['userId'])) {
+            return null;
+        }
+
+        return $this->userRepository->findById($_SESSION['userId']);
     }
 
     /**
@@ -78,7 +88,7 @@ class UserService implements UserServiceInterface
      */
     public function isLoggedIn(): bool
     {
-        // TODO: Implement isLoggedIn() method.
+        return isset($_SESSION['userId']);
     }
 
     /**
@@ -86,6 +96,6 @@ class UserService implements UserServiceInterface
      */
     public function getAll(): \Generator
     {
-        // TODO: Implement getAll() method.
+        return $this->userRepository->findAll();
     }
 }

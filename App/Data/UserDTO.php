@@ -36,37 +36,25 @@ class UserDTO
     private $active;
 
 
-    public static function create(string $firstName,
-                                  string $lastName,
-                                  string $email,
-                                  string $password,
-                                  bool $active,
-                                  int $id = null): UserDTO
+    public static function create(): UserDTO
     {
-        return (new UserDTO())
-            ->setId($id)
-            ->setFirstName($firstName)
-            ->setLastName($lastName)
-            ->setEmail($email)
-            ->setPassword($password)
-            ->setActive($active)
-            ;
+        return new UserDTO();
     }
 
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * @param int $id
+     * @param int|null $id
      * @return UserDTO
      */
-    public function setId(int $id): UserDTO
+    public function setId(int $id = null): UserDTO
     {
         $this->id = $id;
 
@@ -76,7 +64,7 @@ class UserDTO
     /**
      * @return string
      */
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
@@ -95,7 +83,7 @@ class UserDTO
     /**
      * @return string
      */
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
@@ -114,7 +102,7 @@ class UserDTO
     /**
      * @return string
      */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -133,7 +121,7 @@ class UserDTO
     /**
      * @return string
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -150,18 +138,18 @@ class UserDTO
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
-    public function isActive(): bool
+    public function isActive(): ?bool
     {
         return $this->active;
     }
 
     /**
-     * @param bool $active
+     * @param bool|null $active
      * @return UserDTO
      */
-    public function setActive(bool $active): UserDTO
+    public function setActive(bool $active = null): UserDTO
     {
         $this->active = $active;
 
