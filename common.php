@@ -31,3 +31,24 @@ $userController = new \App\Http\UserController($userService, $template, $dataBin
 
 //Home Controller Dependencies
 $homeController = new \App\Http\HomeController($template);
+
+
+//////////////////////////////////////////////////////////////////////////
+////////////// TESTING ORM ///////////////////////////////////////////////
+/// //////////////////////////////////////////////////////////////////////
+
+$builder = new \Database\ORM\MySQLQueryBuilder($db);
+
+$builder->delete('users',
+    [
+        'email' => 'plam@abv.bg',
+    ]);
+
+
+echo '------------------------------------------------------';
+
+////////////////////////////////////////////////////////////////////////////
+
+
+
+
