@@ -27,5 +27,7 @@ interface QueryBuilderInterface
 
     public function delete(string $table, array $where = []): StatementInterface;
 
+    public function getQuery(): string;
+
 
 }

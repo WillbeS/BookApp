@@ -20,6 +20,7 @@ class PDOStatement implements StatementInterface
     public function execute(array $params = []): ResultSetInterface
     {
         $this->statement->execute($params);
+
         return new PDOResultSet($this->statement);
     }
 }

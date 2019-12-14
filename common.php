@@ -39,10 +39,13 @@ $homeController = new \App\Http\HomeController($template);
 
 $builder = new \Database\ORM\MySQLQueryBuilder($db);
 
-$builder->delete('users',
-    [
-        'email' => 'plam@abv.bg',
-    ]);
+$newUSerRepository = new \App\Repository\NewUserRepository($builder);
+
+$user = $newUSerRepository->find(4, [
+    'first_name', 'last_name', 'email'
+]);
+
+var_dump($user);
 
 
 echo '------------------------------------------------------';

@@ -44,13 +44,15 @@ class MySQLQueryBuilder implements QueryBuilderInterface
         if (empty($columns)) {
             $query .= '*';
         } else {
-            $query .= implode(', ', $columns);
+            $mappedColumns = $this->mapColumnsToProperties($columns);
+            $query .= implode(', ', $mappedColumns);
         }
 
         $this->query = $query;
 
         return $this;
     }
+
 
     public function from(string $table): QueryBuilderInterface
     {
@@ -61,13 +63,10 @@ class MySQLQueryBuilder implements QueryBuilderInterface
 
     public function where(array $criteria = []): QueryBuilderInterface
     {
-        $query = ' WHERE 1=1';
-
-        foreach (array_keys($criteria) as $column) {
-            $query .= ' AND ' . $column . ' = ?';
-        }
+        $query = $this->addWhereToQuery($criteria);
 
         $this->query .= $query;
+
         $this->executeParams = array_values($criteria);
 
         return $this;
@@ -94,7 +93,6 @@ class MySQLQueryBuilder implements QueryBuilderInterface
 
     public function build(): ResultSetInterface
     {
-        var_dump($this->executeParams);
         return $this->db->query($this->query)->execute($this->executeParams);
     }
 
@@ -140,6 +138,12 @@ class MySQLQueryBuilder implements QueryBuilderInterface
         return $stmt;
     }
 
+
+    public function getQuery(): string
+    {
+        return $this->query;
+    }
+
     private function addWhereToQuery(array $criteria): string
     {
         if (count($criteria) < 1) {
@@ -155,5 +159,23 @@ class MySQLQueryBuilder implements QueryBuilderInterface
         }
 
         return $query;
+    }
+
+    private function mapColumnsToProperties(array $columns): array
+    {
+        $properties = [];
+
+        foreach ($columns as $column) {
+            $parts = explode('_', $column);
+            $property = array_shift($parts);
+
+            foreach ($parts as $part) {
+                $property .= ucfirst($part);
+            }
+
+            $properties[] = $column . ' AS ' . $property;
+        }
+
+        return $properties;
     }
 }
