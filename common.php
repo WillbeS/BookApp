@@ -29,7 +29,7 @@ $userRepo = new \App\Repository\UserRepository($queryBuilder);
 $roleRepo = new \App\Repository\Role\RoleRepository($queryBuilder);
 
 $encryptionService = new App\Service\Encryption\ArgonEncryptionService();
-$userService = new \App\Service\User\UserService($userRepo, $roleRepo, $encryptionService);
+$userService = new \App\Service\User\UserService($userRepo, $roleRepo, $encryptionService, $session);
 
 $userController = new \App\Http\UserController($userService, $template, $dataBinder, $session);
 

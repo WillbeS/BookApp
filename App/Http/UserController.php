@@ -5,6 +5,9 @@ namespace App\Http;
 
 
 use App\Data\UserDTO;
+use App\Exception\InvalidCredentialsException;
+use App\Exception\UserNotActiveException;
+use App\Exception\RegisterException;
 use App\Service\User\UserServiceInterface;
 use Core\DataBinderInterface;
 use Core\SessionInterface;
@@ -46,11 +49,12 @@ class UserController extends AbstractController
         $user = UserDTO::create();
 
         if (isset($formData['register'])) {
-            if ($this->handleRegisterProcess($formData, $user)) {
+            try {
+                $this->handleRegisterProcess($formData, $user);
                 $this->addFlashMessage('Congratulations! Your registration was successful. You will be able to login into your account once it has been activated by our administration.');
                 $this->redirect('index.php');
-            } else {
-                $this->addFlashError('Something went wrong.'); // TODO - the real message after validations
+            } catch (RegisterException $exception) {
+                $this->addFlashError($exception->getMessage());
                 $this->renderWithLayout('user/register', $user);
             }
         } else {
@@ -61,16 +65,28 @@ class UserController extends AbstractController
     public function login(array $formData)
     {
         if (isset($formData['login'])) {
-            $userDto = $this->handleLoginProcess($formData);
-            if (null !== $userDto) {
-                $_SESSION['userId'] = $userDto->getId();
+            try {
+                $userDto = $this->handleLoginProcess($formData);
+                $this->session->setUserId($userDto->getId());
+                $this->session->setUserRoles($this->userService->getRoles());
                 $this->redirect('index.php');
-            } else {
-                //TODO - some error/messages handling
+            } catch (UserNotActiveException $exception) {
+                $this->addFlashError($exception->getMessage());
+                $this->redirect('index.php');
+            } catch (InvalidCredentialsException $exception) {
+                $this->addFlashError($exception->getMessage());
+                $this->renderWithLayout('user/login');
             }
         } else {
             $this->renderWithLayout('user/login');
         }
+    }
+
+    public function logout()
+    {
+        $this->session->setUserId(null);
+        $this->session->setUserRoles([]);
+        $this->redirect('index.php');
     }
 
     public function editProfile(array $formData)

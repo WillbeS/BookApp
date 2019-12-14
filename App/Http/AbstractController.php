@@ -4,6 +4,7 @@
 namespace App\Http;
 
 
+use App\Data\Template\AppData;
 use Core\SessionInterface;
 use Core\TemplateInterface;
 
@@ -17,7 +18,12 @@ abstract class AbstractController
     /**
      * @var SessionInterface
      */
-    private $session;
+    protected $session;
+
+    /**
+     * @var AppData
+     */
+    protected $appData;
 
     /**
      * MainController constructor.
@@ -28,6 +34,8 @@ abstract class AbstractController
     {
         $this->template = $template;
         $this->session = $session;
+
+        $this->initAppData();
     }
 
     protected function render(string $templateName, $data = null)
@@ -42,7 +50,7 @@ abstract class AbstractController
 
     protected function renderWithLayout(string $templateName, $contentData = null, $appData = null): void
     {
-        $appData = null !== $appData ? $appData : $this->getSession();
+        $appData = null !== $appData ? $appData : $this->appData;
 
         $this->template->renderWithLayout($templateName, $contentData, $appData);
     }
@@ -60,5 +68,12 @@ abstract class AbstractController
     protected function addFlashError(string $error): void
     {
         $this->session->addError($error);
+    }
+
+    protected function initAppData()
+    {
+        $this->appData = (new AppData())
+            ->setSession($this->session)
+        ;
     }
 }

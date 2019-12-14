@@ -3,7 +3,6 @@
 
 namespace App\Service\User;
 
-
 use App\Data\UserDTO;
 
 interface UserServiceInterface
@@ -11,16 +10,16 @@ interface UserServiceInterface
     /**
      * @param UserDTO $userDTO
      * @param string $confirmPassword
-     * @return bool
+     * @return void
      */
-    public function register(UserDTO $userDTO, string $confirmPassword): bool;
+    public function register(UserDTO $userDTO, string $confirmPassword): void;
 
     /**
      * @param string $email
      * @param string $password
      * @return UserDTO|null
      */
-    public function login(string $email, string $password): ?UserDTO;
+    public function login(string $email, string $password): UserDTO;
 
     /**
      * @param UserDTO $userDTO
@@ -42,4 +41,6 @@ interface UserServiceInterface
      * @return \Generator|UserDTO[]
      */
     public function getAll(): \Generator;
+
+    public function getRoles(): array;
 }

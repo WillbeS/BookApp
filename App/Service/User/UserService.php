@@ -5,10 +5,15 @@ namespace App\Service\User;
 
 
 use App\Data\RoleDTO;
+use App\Data\Template\CurrentUser;
 use App\Data\UserDTO;
+use App\Exception\InvalidCredentialsException;
+use App\Exception\UserNotActiveException;
+use App\Exception\RegisterException;
 use App\Repository\Role\UsersRolesRepositoryInterface;
 use App\Repository\UserRepositoryInterface;
 use App\Service\Encryption\EncryptionServiceInterface;
+use Core\SessionInterface;
 
 class UserService implements UserServiceInterface
 {
@@ -27,27 +32,38 @@ class UserService implements UserServiceInterface
      */
     private $encryptionService;
 
+    /**
+     * @var SessionInterface
+     */
+    protected $session;
+
+
     public function __construct(UserRepositoryInterface $userRepository,
                                 UsersRolesRepositoryInterface $roleRepository,
-                                EncryptionServiceInterface $encryptionService)
+                                EncryptionServiceInterface $encryptionService,
+                                SessionInterface $session)
     {
         $this->userRepository = $userRepository;
         $this->roleRepository = $roleRepository;
         $this->encryptionService = $encryptionService;
+        $this->session = $session;
     }
 
 
     /**
-     * @inheritDoc
+     * @param UserDTO $userDTO
+     * @param string $confirmPassword
+     * @return void
+     * @throws RegisterException
      */
-    public function register(UserDTO $userDTO, string $confirmPassword): bool
+    public function register(UserDTO $userDTO, string $confirmPassword): void
     {
         if ($userDTO->getPassword() !== $confirmPassword) {
-            return false;
+            throw new RegisterException('Passwords mismatch.');
         }
 
         if (null !== $this->userRepository->findByEmail($userDTO->getEmail())) {
-            return false;
+            throw new RegisterException('Email address is already taken.');
         }
 
         $userRole = $this->roleRepository->findOneBy(['name' => 'ROLE_USER']);
@@ -59,19 +75,25 @@ class UserService implements UserServiceInterface
 
         $userId = $this->userRepository->insert($userDTO);
         $this->roleRepository->addRoleToUser($userId, $userRole->getId());
-
-        return true;
     }
 
     /**
-     * @inheritDoc
+     * @param string $email
+     * @param string $password
+     * @return UserDTO
+     * @throws InvalidCredentialsException
+     * @throws UserNotActiveException
      */
-    public function login(string $email, string $password): ?UserDTO
+    public function login(string $email, string $password): UserDTO
     {
         $userDto = $this->userRepository->findByEmail($email);
 
         if (null === $userDto || !$this->encryptionService->isValid($password, $userDto->getPassword())) {
-            return null;
+           throw new InvalidCredentialsException('Invalid username or password');
+        }
+
+        if (!$userDto->isActive()) {
+            throw new UserNotActiveException('Your registration is not active yet. Please try again later.');
         }
 
         return $userDto;
@@ -102,7 +124,7 @@ class UserService implements UserServiceInterface
      */
     public function isLoggedIn(): bool
     {
-        return isset($_SESSION['userId']);
+        return null !== $this->session->getUserId();
     }
 
     /**
@@ -113,10 +135,12 @@ class UserService implements UserServiceInterface
         return $this->userRepository->findAll();
     }
 
-    public function getRoles(int $userId): array
+    public function getRoles(): array
     {
+        $currentUserId = $this->session->getUserId();
+
         /** @var RoleDTO[] $roles */
-        $roles = $this->roleRepository->findRolesByUser($userId);
+        $roles = $this->roleRepository->findRolesByUser($currentUserId);
         $roleNames = [];
 
         foreach ($roles as $role) {
@@ -124,12 +148,5 @@ class UserService implements UserServiceInterface
         }
 
         return $roleNames;
-    }
-
-    public function isAdmin(int $userId): bool
-    {
-        $userRoles = $this->getRoles($userId);
-
-        return in_array('ROLE_ADMIN', $userRoles);
     }
 }

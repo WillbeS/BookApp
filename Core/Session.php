@@ -22,7 +22,7 @@ class Session implements SessionInterface
      * @param int $id
      * @return SessionInterface
      */
-    public function setUserId(int $id): SessionInterface
+    public function setUserId(int $id = null): SessionInterface
     {
         $_SESSION['userId'] = $id;
 
@@ -69,5 +69,21 @@ class Session implements SessionInterface
         $_SESSION['errors'][] = $error;
 
         return $this;
+    }
+
+    public function setUserRoles(array $roles): SessionInterface
+    {
+        $_SESSION['userRoles'] = $roles;
+
+        return $this;
+    }
+
+    public function getUserRoles(): array
+    {
+        if (!isset($_SESSION['userRoles'])) {
+            $_SESSION['userRoles'] = [];
+        }
+
+        return $_SESSION['userRoles'];
     }
 }

@@ -1,5 +1,5 @@
 <?php /** @var string $templateName */ ?>
-<?php /** @var \Core\SessionInterface $appData */ ?>
+<?php /** @var \App\Data\Template\AppData $appData */ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,7 +26,7 @@
 
     <div class="row justify-content-md-center mt-3">
         <div class="col-md-9">
-            <?php foreach ($appData->getMessages() as $message): ?>
+            <?php foreach ($appData->getSession()->getMessages() as $message): ?>
                 <div class="alert alert-info alert-dismissible" role="alert">
                     <button type="button" class="close" data-dismiss="alert">
                         <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
@@ -35,7 +35,7 @@
                 </div>
             <?php endforeach; ?>
 
-            <?php foreach ($appData->getErrors() as $error): ?>
+            <?php foreach ($appData->getSession()->getErrors() as $error): ?>
                 <div class="alert alert-danger alert-dismissible" role="alert">
                     <button type="button" class="close" data-dismiss="alert">
                         <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
@@ -45,10 +45,6 @@
             <?php endforeach; ?>
         </div>
     </div>
-
-<!--    --><?php //$partialName = 'index.php' ?>
-<!---->
-<!---->
 
     <?php require_once $templateName; ?>
 
