@@ -4,7 +4,9 @@
 namespace App\Service\User;
 
 
+use App\Data\RoleDTO;
 use App\Data\UserDTO;
+use App\Repository\Role\UsersRolesRepositoryInterface;
 use App\Repository\UserRepositoryInterface;
 use App\Service\Encryption\EncryptionServiceInterface;
 
@@ -16,14 +18,21 @@ class UserService implements UserServiceInterface
     private $userRepository;
 
     /**
+     * @var UsersRolesRepositoryInterface
+     */
+    private $roleRepository;
+
+    /**
      * @var EncryptionServiceInterface
      */
     private $encryptionService;
 
     public function __construct(UserRepositoryInterface $userRepository,
+                                UsersRolesRepositoryInterface $roleRepository,
                                 EncryptionServiceInterface $encryptionService)
     {
         $this->userRepository = $userRepository;
+        $this->roleRepository = $roleRepository;
         $this->encryptionService = $encryptionService;
     }
 
@@ -41,12 +50,17 @@ class UserService implements UserServiceInterface
             return false;
         }
 
+        $userRole = $this->roleRepository->findOneBy(['name' => 'ROLE_USER']);
+
         $userDTO
             ->setPassword($this->encryptionService->encrypt($userDTO->getPassword()))
             ->setActive(false)
         ;
 
-        return $this->userRepository->insert($userDTO);
+        $userId = $this->userRepository->insert($userDTO);
+        $this->roleRepository->addRoleToUser($userId, $userRole->getId());
+
+        return true;
     }
 
     /**
@@ -97,5 +111,25 @@ class UserService implements UserServiceInterface
     public function getAll(): \Generator
     {
         return $this->userRepository->findAll();
+    }
+
+    public function getRoles(int $userId): array
+    {
+        /** @var RoleDTO[] $roles */
+        $roles = $this->roleRepository->findRolesByUser($userId);
+        $roleNames = [];
+
+        foreach ($roles as $role) {
+            $roleNames[] = $role->getName();
+        }
+
+        return $roleNames;
+    }
+
+    public function isAdmin(int $userId): bool
+    {
+        $userRoles = $this->getRoles($userId);
+
+        return in_array('ROLE_ADMIN', $userRoles);
     }
 }

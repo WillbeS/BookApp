@@ -17,7 +17,7 @@ class Template implements TemplateInterface
         require_once $this->getFullTemplateName($templateName);
     }
 
-    public function renderWithLayout(string $templateName, $data = null): void
+    public function renderWithLayout(string $templateName, $contentData = null, $appData = null): void
     {
         $templateName = $this->getFullTemplateName($templateName);
 

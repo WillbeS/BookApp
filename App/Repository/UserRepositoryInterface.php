@@ -12,7 +12,7 @@ interface UserRepositoryInterface
      * @param UserDTO $userDTO
      * @return bool
      */
-    public function insert(UserDTO $userDTO): bool;
+    public function insert(UserDTO $userDTO): int;
 
     /**
      * @param int $id

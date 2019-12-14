@@ -18,12 +18,11 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
     /**
      * @inheritDoc
      */
-    public function insert(UserDTO $userDTO): bool
+    public function insert(UserDTO $userDTO): int
     {
         $values = $this->mapObjectPropertiesToColumns($userDTO);
-        $this->queryBuilder->insert($this->table, $values);
 
-        return true;
+        return $this->queryBuilder->insert($this->table, $values);
     }
 
     /**

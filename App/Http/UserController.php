@@ -7,6 +7,7 @@ namespace App\Http;
 use App\Data\UserDTO;
 use App\Service\User\UserServiceInterface;
 use Core\DataBinderInterface;
+use Core\SessionInterface;
 use Core\TemplateInterface;
 
 class UserController extends AbstractController
@@ -27,12 +28,14 @@ class UserController extends AbstractController
      * @param UserServiceInterface $userService
      * @param TemplateInterface $template
      * @param DataBinderInterface $dataBinder
+     * @param SessionInterface $session
      */
     public function __construct(UserServiceInterface $userService,
                                 TemplateInterface $template,
-                                DataBinderInterface $dataBinder)
+                                DataBinderInterface $dataBinder,
+                                SessionInterface $session)
     {
-        parent::__construct($template);
+        parent::__construct($template, $session);
         $this->userService = $userService;
         $this->dataBinder = $dataBinder;
     }
@@ -44,9 +47,10 @@ class UserController extends AbstractController
 
         if (isset($formData['register'])) {
             if ($this->handleRegisterProcess($formData, $user)) {
-                $this->redirect('login.php');
+                $this->addFlashMessage('Congratulations! Your registration was successful. You will be able to login into your account once it has been activated by our administration.');
+                $this->redirect('index.php');
             } else {
-                //TODO - flash message
+                $this->addFlashError('Something went wrong.'); // TODO - the real message after validations
                 $this->renderWithLayout('user/register', $user);
             }
         } else {
@@ -65,7 +69,7 @@ class UserController extends AbstractController
                 //TODO - some error/messages handling
             }
         } else {
-            $this->render('user/login');
+            $this->renderWithLayout('user/login');
         }
     }
 
@@ -81,12 +85,17 @@ class UserController extends AbstractController
             if ($this->handleEditProfileProcess($formData, $user)) {
                 $this->redirect('index.php');
             } else {
+                var_dump('Error'); //temp
                 //TODO - some error/messages handling
             }
         } else {
             $this->render('user/edit_profile', $user);
         }
     }
+
+
+
+    // Private methods
 
     private function handleRegisterProcess(array $formData, UserDTO $user): bool
     {

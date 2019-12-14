@@ -3,7 +3,7 @@
 namespace App\Data;
 
 
-class UserDTO
+class RoleDTO
 {
     /**
      * @var int

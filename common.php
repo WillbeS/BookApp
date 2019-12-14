@@ -22,22 +22,24 @@ $db = new \Database\PDODatabase(\Config\DbConfig::DB_HOST,
 $template = new \Core\Template();
 $dataBinder = new \Core\DataBinder();
 $queryBuilder = new \Database\ORM\MySQLQueryBuilder($db);
+$session = new \Core\Session();
 
 //User Controller Dependencies
 $userRepo = new \App\Repository\UserRepository($queryBuilder);
-$encryptionService = new App\Service\Encryption\ArgonEncryptionService();
-$userService = new \App\Service\User\UserService($userRepo, $encryptionService);
+$roleRepo = new \App\Repository\Role\RoleRepository($queryBuilder);
 
-$userController = new \App\Http\UserController($userService, $template, $dataBinder);
+$encryptionService = new App\Service\Encryption\ArgonEncryptionService();
+$userService = new \App\Service\User\UserService($userRepo, $roleRepo, $encryptionService);
+
+$userController = new \App\Http\UserController($userService, $template, $dataBinder, $session);
 
 //Home Controller Dependencies
-$homeController = new \App\Http\HomeController($template);
+$homeController = new \App\Http\HomeController($template, $session);
 
 
 //////////////////////////////////////////////////////////////////////////
 ////////////// TESTING ORM ///////////////////////////////////////////////
 /// //////////////////////////////////////////////////////////////////////
-
 
 //
 //$newUSerRepository = new \App\Repository\UserRepository($builder);

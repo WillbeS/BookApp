@@ -1,4 +1,4 @@
-<?php /** @var \App\Data\UserDTO $data */ ?>
+<?php /** @var \App\Data\UserDTO $contentData */ ?>
 <div class="jumbotron text-center">
     <div class="row justify-content-md-center" id="login">
         <div class="col-sm-6 col-sm-offset-3 border border-primary p-3 pl-5 pr-5">
@@ -7,19 +7,19 @@
                 <div class="form-group">
                     <label for="first_name" class="required">First name</label>
                     <input type="text" id="first_name" name="first_name" required="required" class="form-control"
-                           value="<?= $data->getFirstName() ?>" />
+                           value="<?= $contentData->getFirstName() ?>" />
                 </div>
 
                 <div class="form-group">
                     <label for="last_name" class="required">Last name</label>
                     <input type="text" id="last_name" name="last_name" required="required" class="form-control"
-                           value="<?= $data->getLastName() ?>" />
+                           value="<?= $contentData->getLastName() ?>" />
                 </div>
 
                 <div class="form-group">
                     <label for="email" class="required">Email</label>
                     <input type="email" id="email" name="email" required="required" class="form-control"
-                           value="<?= $data->getEmail() ?>" />
+                           value="<?= $contentData->getEmail() ?>" />
                 </div>
 
                 <div class="form-group">

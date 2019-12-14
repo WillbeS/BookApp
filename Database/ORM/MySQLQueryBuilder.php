@@ -91,12 +91,32 @@ class MySQLQueryBuilder implements QueryBuilderInterface
         //TODO - ricky because of that int shit
     }
 
+
+    /**
+     * @param string $query
+     * @return QueryBuilderInterface
+     */
+    public function setQuery(string $query): QueryBuilderInterface
+    {
+        $this->query = $query;
+
+        return $this;
+    }
+
+    public function setExecuteParams(array $params): QueryBuilderInterface
+    {
+        $this->executeParams = $params;
+
+        return $this;
+    }
+
+
     public function build(): ResultSetInterface
     {
         return $this->db->query($this->query)->execute($this->executeParams);
     }
 
-    public function insert(string $table, array $values): StatementInterface
+    public function insert(string $table, array $values): int
     {
         $query = 'INSERT INTO ' . $table
                 . ' (' . implode(', ', array_keys($values)) . ')'
@@ -107,7 +127,7 @@ class MySQLQueryBuilder implements QueryBuilderInterface
         $stm = $this->db->query($query);
         $stm->execute(array_values($values));
 
-        return $stm;
+        return $this->db->getLastInsertId();
     }
 
     public function update(string $table, array $values, array $where = []): StatementInterface

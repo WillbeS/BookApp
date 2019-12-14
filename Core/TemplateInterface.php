@@ -6,5 +6,5 @@ interface TemplateInterface
 {
     public function render(string $templateName, $data): void;
 
-    public function renderWithLayout(string $templateName, $data = null): void;
+    public function renderWithLayout(string $templateName, $contentData = null, $appData = null): void;
 }
