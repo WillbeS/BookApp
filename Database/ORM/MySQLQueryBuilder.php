@@ -131,6 +131,7 @@ class MySQLQueryBuilder implements QueryBuilderInterface
     {
         $query = 'DELETE FROM ' . $table . $this->addWhereToQuery($where);
 
+        var_dump($query);
 
         $stmt = $this->db->query($query);
         $stmt->execute(array_values($where));

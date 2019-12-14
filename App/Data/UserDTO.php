@@ -36,11 +36,11 @@ class UserDTO
     private $active;
 
 
+
     public static function create(): UserDTO
     {
         return new UserDTO();
     }
-
 
     /**
      * @return int|null

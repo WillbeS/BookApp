@@ -38,8 +38,10 @@ class PDOResultSet implements ResultSetInterface
     /**
      * @inheritDoc
      */
-    public function fetchOne(string $className): object
+    public function fetchOne(string $className): ?object
     {
-        return $this->pdoStatement->fetchObject($className);
+        $result = $this->pdoStatement->fetchObject($className);
+
+        return $result ? $result : null;
     }
 }

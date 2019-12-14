@@ -47,10 +47,10 @@ class UserController extends AbstractController
                 $this->redirect('login.php');
             } else {
                 //TODO - flash message
-                $this->render('user/register', $user);
+                $this->renderWithLayout('user/register', $user);
             }
         } else {
-            $this->render('user/register', $user);
+            $this->renderWithLayout('user/register', $user);
         }
     }
 

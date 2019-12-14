@@ -18,5 +18,5 @@ interface ResultSetInterface
      * @param string $className
      * @return object
      */
-    public function fetchOne(string $className): object;
+    public function fetchOne(string $className): ?object;
 }

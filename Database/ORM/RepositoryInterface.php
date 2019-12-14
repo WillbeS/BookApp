@@ -7,28 +7,31 @@ namespace Database\ORM;
 interface RepositoryInterface
 {
     /**
+     * @param array $columns
      * @param array $orderBy
      * @return \Generator
      */
-    public function findAll(array $orderBy = []): \Generator;
+    public function findAll(array $columns = [], array $orderBy = []): \Generator;
 
     /**
      * @param array $where
+     * @param array $columns
      * @param array $orderBy
      * @return \Generator
      */
-    public function findBy(array $where, array $orderBy = []): \Generator;
+    public function findBy(array $where, array $columns = [], array $orderBy = []): \Generator;
 
     /**
-     * @param string $primaryKey
-     * @return object
+     * @param array $where
+     * @param array $columns
+     * @return object|null
      */
-    public function findOne(string $primaryKey): object;
+    public function findOneBy(array $where, array $columns = []): ?object;
 
     /**
      * @param int $id
      * @param array $columns
-     * @return object
+     * @return object|null
      */
-    public function find(int $id, array $columns = []): object;
+    public function find(int $id, array $columns = []): ?object;
 }

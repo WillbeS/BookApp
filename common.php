@@ -21,9 +21,10 @@ $db = new \Database\PDODatabase(\Config\DbConfig::DB_HOST,
 
 $template = new \Core\Template();
 $dataBinder = new \Core\DataBinder();
+$queryBuilder = new \Database\ORM\MySQLQueryBuilder($db);
 
 //User Controller Dependencies
-$userRepo = new \App\Repository\UserRepository($db);
+$userRepo = new \App\Repository\UserRepository($queryBuilder);
 $encryptionService = new App\Service\Encryption\ArgonEncryptionService();
 $userService = new \App\Service\User\UserService($userRepo, $encryptionService);
 
@@ -37,18 +38,22 @@ $homeController = new \App\Http\HomeController($template);
 ////////////// TESTING ORM ///////////////////////////////////////////////
 /// //////////////////////////////////////////////////////////////////////
 
-$builder = new \Database\ORM\MySQLQueryBuilder($db);
 
-$newUSerRepository = new \App\Repository\NewUserRepository($builder);
-
-$user = $newUSerRepository->find(4, [
-    'first_name', 'last_name', 'email'
-]);
-
-var_dump($user);
-
-
-echo '------------------------------------------------------';
+//
+//$newUSerRepository = new \App\Repository\UserRepository($builder);
+//
+//$user = \App\Data\UserDTO::create();
+//
+//$user->setFirstName('plam2Edited')
+//    ->setLastName('hhh')
+//    ->setEmail('email4')
+//    ->setPassword('pass')
+//    ->setActive(true);
+//
+////$newUSerRepository->insert($user);
+//var_dump($newUSerRepository->findByEmail('email4'));
+//
+//echo '------------------------------------------------------';
 
 ////////////////////////////////////////////////////////////////////////////
 

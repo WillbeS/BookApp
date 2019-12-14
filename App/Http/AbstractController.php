@@ -27,9 +27,14 @@ abstract class AbstractController
         $this->template->render($templateName, $data);
     }
 
-    public function redirect(string $url)
+    protected function redirect(string $url)
     {
         header("Location: $url");
+    }
+
+    protected function renderWithLayout(string $templateName, $data = null): void
+    {
+        $this->template->renderWithLayout($templateName, $data);
     }
 
 }

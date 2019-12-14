@@ -4,28 +4,30 @@
 namespace Database\ORM;
 
 
+use ReflectionProperty;
+
 abstract class AbstractRepository implements RepositoryInterface
 {
     /**
      * @var string
      */
-    private $entity;
+    protected $entity;
 
     /**
      * @var string
      */
-    private $table;
+    protected $table;
 
     /**
      * @var string
      */
-    private $primaryKey;
+    protected $primaryKey;
 
 
     /**
      * @var QueryBuilderInterface
      */
-    private $queryBuilder;
+    protected $queryBuilder;
 
 
     /**
@@ -50,9 +52,13 @@ abstract class AbstractRepository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function findAll(array $orderBy = []): \Generator
+    public function findAll(array $columns = [], array $orderBy = []): \Generator
     {
-        $builder = $this->queryBuilder->select()->from($this->table);
+        if (empty($columns)) {
+            $columns = $this->getAllColumns();
+        }
+
+        $builder = $this->queryBuilder->select($columns)->from($this->table);
 
         if (!empty($orderBy)) {
             $builder->orderBy($orderBy);
@@ -64,10 +70,14 @@ abstract class AbstractRepository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function findBy(array $where, array $orderBy = []): \Generator
+    public function findBy(array $where, array $columns = [], array $orderBy = []): \Generator
     {
+        if (empty($columns)) {
+            $columns = $this->getAllColumns();
+        }
+
         $builder = $this->queryBuilder
-            ->select()
+            ->select($columns)
             ->from($this->table)
             ->where($where)
         ;
@@ -80,14 +90,20 @@ abstract class AbstractRepository implements RepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * @param array $where
+     * @param array $columns
+     * @return object|null
      */
-    public function findOne(string $primaryKey): object
+    public function findOneBy(array $where, array $columns = []): ?object
     {
+        if (empty($columns)) {
+            $columns = $this->getAllColumns();
+        }
+
         $builder = $this->queryBuilder
-            ->select()
+            ->select($columns)
             ->from($this->table)
-            ->where([$this->primaryKey => $primaryKey])
+            ->where($where)
         ;
 
         return $builder->build()->fetchOne($this->entity);
@@ -96,10 +112,14 @@ abstract class AbstractRepository implements RepositoryInterface
     /**
      * @param int $id
      * @param array $columns
-     * @return object
+     * @return object|null
      */
-    public function find(int $id, array $columns = []): object
+    public function find(int $id, array $columns = []): ?object
     {
+        if (empty($columns)) {
+            $columns = $this->getAllColumns();
+        }
+
         $builder = $this->queryBuilder
             ->select($columns)
             ->from($this->table)
@@ -109,5 +129,85 @@ abstract class AbstractRepository implements RepositoryInterface
         var_dump($builder->getQuery());
 
         return $builder->build()->fetchOne($this->entity);
+    }
+
+    protected function getAllColumns(): array
+    {
+        $columns = [];
+
+        try {
+            $classInfo = new \ReflectionClass($this->entity);
+
+            $properties = $classInfo->getProperties();
+
+            foreach ($properties as $property) {
+                $propName = $property->getName();
+
+                $pieces = preg_split('/(?=[A-Z])/',$propName);
+
+                $column = implode('_', array_map(function ($el) {
+                    return strtolower($el);
+                }, $pieces));
+
+
+                $columns[] = $column;
+            }
+
+        } catch (\ReflectionException $exception) {
+            // TODO - some logger
+        }
+
+        return $columns;
+    }
+
+    /**
+     * @param object $object
+     * @param bool $skipId
+     * @return array
+     */
+    protected function mapObjectPropertiesToColumns(object $object, bool $skipId = true): array
+    {
+        $columns = [];
+
+        try {
+            $classInfo = new \ReflectionClass($object);
+
+            $properties = $classInfo->getProperties();
+
+            foreach ($properties as $property) {
+                $propName = $property->getName();
+
+                if ($skipId && 'id' === $propName) {
+                    continue;
+                }
+
+                $pieces = preg_split('/(?=[A-Z])/',$propName);
+
+                $column = implode('_', array_map(function ($el) {
+                    return strtolower($el);
+                }, $pieces));
+
+                $getter = $this->getPropertyValue($property, $object);
+
+                $columns[$column] = $this->getPropertyValue($property, $object);
+            }
+
+        } catch (\ReflectionException $exception) {
+            // TODO - some logger
+        }
+
+        return $columns;
+    }
+
+    private function getPropertyValue(ReflectionProperty $property, object $object): ?string
+    {
+        $getter = 'get' . ucfirst($property->getName());
+        $boolGetter = 'is' . ucfirst($property->getName());
+
+        if(method_exists($object, $getter)) {
+            return $object->$getter();
+        } elseif(method_exists($object, $boolGetter)) {
+            return (string)(int)$object->$boolGetter();
+        }
     }
 }

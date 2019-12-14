@@ -5,19 +5,14 @@ namespace App\Repository;
 
 
 use App\Data\UserDTO;
-use Database\DatabaseInterface;
+use Database\ORM\AbstractRepository;
+use Database\ORM\QueryBuilderInterface;
 
-class UserRepository implements UserRepositoryInterface
+class UserRepository extends AbstractRepository implements UserRepositoryInterface
 {
-    /**
-     * @var DatabaseInterface
-     */
-    private $db;
-
-
-    public function __construct(DatabaseInterface $database)
+    public function __construct(QueryBuilderInterface $queryBuilder)
     {
-        $this->db = $database;
+        parent::__construct(UserDTO::class, 'users', 'id', $queryBuilder);
     }
 
     /**
@@ -25,20 +20,8 @@ class UserRepository implements UserRepositoryInterface
      */
     public function insert(UserDTO $userDTO): bool
     {
-        $this->db->query(
-            "
-                    INSERT INTO users (first_name, last_name, email, password, active) 
-                    VALUES (? , ?, ?, ?, ?)
-            "
-        )->execute(
-            [
-                $userDTO->getFirstName(),
-                $userDTO->getLastName(),
-                $userDTO->getEmail(),
-                $userDTO->getPassword(),
-                (int)$userDTO->isActive(), //mysql converts this to string, so if not int false is ''
-            ]
-        );
+        $values = $this->mapObjectPropertiesToColumns($userDTO);
+        $this->queryBuilder->insert($this->table, $values);
 
         return true;
     }
@@ -48,21 +31,8 @@ class UserRepository implements UserRepositoryInterface
      */
     public function updateProfile(int $id, UserDTO $userDTO): bool
     {
-        $this->db->query(
-            "
-                UPDATE users
-                SET 
-                    first_name = ?,
-                    last_name = ?,
-                    email = ? 
-                WHERE id = ?
-            "
-        )->execute([
-            $userDTO->getFirstName(),
-            $userDTO->getLastName(),
-            $userDTO->getEmail(),
-            $id
-        ]);
+        $values = $this->mapObjectPropertiesToColumns($userDTO);
+        $this->queryBuilder->update($this->table, $values, ['id' => $id]);
 
         return true;
     }
@@ -72,11 +42,7 @@ class UserRepository implements UserRepositoryInterface
      */
     public function delete(int $id): bool
     {
-        $this->db->query(
-            "DELETE FROM users WHERE id = ?"
-        )->execute([
-            $id
-        ]);
+        $this->queryBuilder->delete($this->table, ['id' => $id]);
 
         return true;
     }
@@ -84,59 +50,16 @@ class UserRepository implements UserRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function findById(int $id): ?UserDTO
-    {
-        return $this->db->query(
-            "
-                        SELECT id, 
-                                first_name as firstName, 
-                                last_name as lastName, 
-                                email, 
-                                password, 
-                                active 
-                        FROM users
-                        WHERE id = ?
-                "
-        )->execute([$id])->fetch(UserDTO::class)->current();
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function findByEmail(string $email): ?UserDTO
     {
-        return $this->db->query(
-                "
-                        SELECT id, 
-                                first_name as firstName, 
-                                last_name lastName, 
-                                email, 
-                                password, 
-                                active 
-                        FROM users
-                        WHERE email = ?
-                "
-        )->execute([$email])
-            ->fetch(UserDTO::class)
-            ->current();
+        return $this->findOneBy(['email' => $email]);
     }
 
     /**
      * @inheritDoc
      */
-    public function findAll(): \Generator
+    public function findById(int $id): ?UserDTO
     {
-        return $this->db->query(
-            "
-                        SELECT id, 
-                                first_name as firstName, 
-                                last_name as lastName, 
-                                email, 
-                                password, 
-                                active 
-                        FROM users
-                "
-        )->execute()
-            ->fetch(UserDTO::class);
+        return $this->find($id);
     }
 }

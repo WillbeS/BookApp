@@ -16,7 +16,9 @@ class HomeController extends AbstractController
 
     public function index(UserServiceInterface $userService)
     {
-        var_dump($userService->isLoggedIn());
-        var_dump($userService->getCurrentUser());
+        $this->renderWithLayout('home/index');
+
     }
+
+
 }
