@@ -3,8 +3,19 @@
 namespace App\Data;
 
 
+use App\Exception\FormValidationException;
+use App\Traits\FormValidationTrait;
+
 class UserDTO
 {
+    use FormValidationTrait;
+
+    const NAME_MIN_LENGTH = 3;
+
+    const NAME_MAX_LENGTH = 50;
+
+    const MIN_PASSWORD_LENGTH = 6;
+
     /**
      * @var int
      */
@@ -36,7 +47,7 @@ class UserDTO
     private $active;
 
 
-
+    //TODO - check if I really need  this
     public static function create(): UserDTO
     {
         return new UserDTO();
@@ -50,16 +61,6 @@ class UserDTO
         return $this->id;
     }
 
-    /**
-     * @param int|null $id
-     * @return UserDTO
-     */
-    public function setId(int $id = null): UserDTO
-    {
-        $this->id = $id;
-
-        return $this;
-    }
 
     /**
      * @return string
@@ -72,9 +73,13 @@ class UserDTO
     /**
      * @param string $firstName
      * @return UserDTO
+     * @throws FormValidationException
      */
     public function setFirstName(string $firstName): UserDTO
     {
+        $this->validateLength($firstName, 'First name', self::NAME_MIN_LENGTH, self::NAME_MAX_LENGTH);
+        $this->validateLatinCharactersAndDigits($firstName,'First name');
+
         $this->firstName = $firstName;
 
         return $this;
@@ -91,9 +96,13 @@ class UserDTO
     /**
      * @param string $lastName
      * @return UserDTO
+     * @throws FormValidationException
      */
     public function setLastName(string $lastName): UserDTO
     {
+        $this->validateLength($lastName, 'Last name', self::NAME_MIN_LENGTH, self::NAME_MAX_LENGTH);
+        $this->validateLatinCharactersAndDigits($lastName,'Last name');
+
         $this->lastName = $lastName;
 
         return $this;
@@ -110,9 +119,14 @@ class UserDTO
     /**
      * @param string $email
      * @return UserDTO
+     * @throws FormValidationException
      */
     public function setEmail(string $email): UserDTO
     {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new FormValidationException('Invalid email format');
+        }
+
         $this->email = $email;
 
         return $this;
@@ -129,10 +143,25 @@ class UserDTO
     /**
      * @param string $password
      * @return UserDTO
+     * @throws FormValidationException
      */
     public function setPassword(string $password): UserDTO
     {
+        $this->validateLength($password, 'Password', self::MIN_PASSWORD_LENGTH);
+        $this->validateLatinCharactersAndDigits($password,'Password');
+
         $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @param string $hashedPassword
+     * @return UserDTO
+     */
+    public function setHashedPassword(string $hashedPassword): UserDTO
+    {
+        $this->password = $hashedPassword;
 
         return $this;
     }

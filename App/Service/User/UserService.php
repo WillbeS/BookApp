@@ -7,6 +7,7 @@ namespace App\Service\User;
 use App\Data\RoleDTO;
 use App\Data\Template\CurrentUser;
 use App\Data\UserDTO;
+use App\Exception\AppException;
 use App\Exception\InvalidCredentialsException;
 use App\Exception\UserNotActiveException;
 use App\Exception\RegisterException;
@@ -54,22 +55,22 @@ class UserService implements UserServiceInterface
      * @param UserDTO $userDTO
      * @param string $confirmPassword
      * @return void
-     * @throws RegisterException
+     * @throws AppException
      */
     public function register(UserDTO $userDTO, string $confirmPassword): void
     {
         if ($userDTO->getPassword() !== $confirmPassword) {
-            throw new RegisterException('Passwords mismatch.');
+            throw new AppException('Passwords mismatch.');
         }
 
         if (null !== $this->userRepository->findByEmail($userDTO->getEmail())) {
-            throw new RegisterException('Email address is already taken.');
+            throw new AppException('Email address is already taken.');
         }
 
         $userRole = $this->roleRepository->findOneBy(['name' => 'ROLE_USER']);
 
         $userDTO
-            ->setPassword($this->encryptionService->encrypt($userDTO->getPassword()))
+            ->setHashedPassword($this->encryptionService->encrypt($userDTO->getPassword()))
             ->setActive(false)
         ;
 

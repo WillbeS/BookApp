@@ -8,7 +8,7 @@ interface DataBinderInterface
     /**
      * @param array $formData
      * @param $object
-     * @return bool
+     * @return array
      */
-    public function bind(array $formData, $object);
+    public function bind(array $formData, $object): array;
 }

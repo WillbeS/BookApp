@@ -3,14 +3,21 @@
 namespace Core;
 
 
+use App\Exception\AppException;
+use App\Exception\FormValidationException;
+
 class DataBinder implements DataBinderInterface
 {
     /**
      * @param array $formData
      * @param $object
+     * @return array
+     * @throws AppException
      */
-    public function bind(array $formData, $object)
+    public function bind(array $formData, $object): array
     {
+        $errors = [];
+
         try {
             $classInfo = new \ReflectionClass($object);
 
@@ -23,12 +30,18 @@ class DataBinder implements DataBinderInterface
                 }
 
                 if(method_exists($object, $methodName)) {
-                    $object->$methodName($value);
+                    try {
+                        $object->$methodName($value);
+                    } catch (FormValidationException $exception) {
+                        $errors[] = $exception->getMessage();
+                    }
                 }
             }
         } catch (\ReflectionException $exception) {
-            // TODO - some logger
+            throw new AppException();
         }
+
+        return $errors;
     }
 
 

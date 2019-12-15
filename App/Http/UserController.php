@@ -5,6 +5,7 @@ namespace App\Http;
 
 
 use App\Data\UserDTO;
+use App\Exception\AppException;
 use App\Exception\InvalidCredentialsException;
 use App\Exception\UserNotActiveException;
 use App\Exception\RegisterException;
@@ -53,7 +54,7 @@ class UserController extends AbstractController
                 $this->handleRegisterProcess($formData, $user);
                 $this->addFlashMessage('Congratulations! Your registration was successful. You will be able to login into your account once it has been activated by our administration.');
                 $this->redirect('index.php');
-            } catch (RegisterException $exception) {
+            } catch (AppException $exception) {
                 $this->addFlashError($exception->getMessage());
                 $this->renderWithLayout('user/register', $user);
             }
@@ -115,7 +116,11 @@ class UserController extends AbstractController
 
     private function handleRegisterProcess(array $formData, UserDTO $user)
     {
-        $this->dataBinder->bind($formData, $user);
+        $validationErrors = $this->dataBinder->bind($formData, $user);
+
+        foreach ($validationErrors as $error) {
+            $this->session->addError($error);
+        }
 
         $this->userService->register($user, $formData['confirm_password']);
     }

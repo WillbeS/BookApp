@@ -44,7 +44,7 @@ class Session implements SessionInterface
 
     public function getErrors(): array
     {
-        if (!isset($_SESSION['messages'])) {
+        if (!isset($_SESSION['errors'])) {
             $_SESSION['errors'] = [];
         }
 

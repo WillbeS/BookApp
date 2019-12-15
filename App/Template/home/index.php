@@ -18,4 +18,3 @@
         </div>
     <?php endforeach; ?>
 </div>
-
