@@ -126,8 +126,6 @@ abstract class AbstractRepository implements RepositoryInterface
             ->where(['id' => $id])
         ;
 
-        var_dump($builder->getQuery());
-
         return $builder->build()->fetchOne($this->entity);
     }
 

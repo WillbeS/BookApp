@@ -2,4 +2,4 @@
 
 require_once 'common.php';
 
-$homeController->index($userService);
+$homeController->index();

@@ -33,8 +33,13 @@ $userService = new \App\Service\User\UserService($userRepo, $roleRepo, $encrypti
 
 $userController = new \App\Http\UserController($userService, $template, $dataBinder, $session);
 
+//AdminController
+$bookRepository = new \App\Repository\Book\BookRepository($queryBuilder);
+$bookService = new \App\Service\Book\BookService($bookRepository);
+$adminController = new \App\Http\AdminController($template, $session, $bookService, $dataBinder);
+
 //Home Controller Dependencies
-$homeController = new \App\Http\HomeController($template, $session);
+$homeController = new \App\Http\HomeController($template, $session, $bookService);
 
 
 //////////////////////////////////////////////////////////////////////////

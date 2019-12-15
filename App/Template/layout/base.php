@@ -53,5 +53,21 @@
 <script src="web/js/jquery.min.js"></script>
 <script src="web/js/popper.min.js"></script>
 <script src="web/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function(){
+        let popoverBtn = $("[data-toggle=popover]");
+        popoverBtn.click(function (event) {
+            event.preventDefault();
+        });
+        popoverBtn
+            .popover(
+                {
+                    placement: 'top',
+                    html:true,
+                    title: '<button type="button" class="close">&times;</button>'
+                }
+            );
+    });
+</script>
 </body>
 </html>

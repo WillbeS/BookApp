@@ -7,17 +7,6 @@ namespace Core;
 class Session implements SessionInterface
 {
 
-    public function __construct()
-    {
-        if (!isset($_SESSION['messages'])) {
-            $_SESSION['messages'] = [];
-        }
-
-        if (!isset($_SESSION['messages'])) {
-            $_SESSION['errors'] = [];
-        }
-    }
-
     /**
      * @param int $id
      * @return SessionInterface
@@ -43,6 +32,10 @@ class Session implements SessionInterface
 
     public function getMessages(): array
     {
+        if (!isset($_SESSION['messages'])) {
+            $_SESSION['messages'] = [];
+        }
+
         $messages = $_SESSION['messages'];
         $_SESSION['messages'] = [];
 
@@ -51,6 +44,10 @@ class Session implements SessionInterface
 
     public function getErrors(): array
     {
+        if (!isset($_SESSION['messages'])) {
+            $_SESSION['errors'] = [];
+        }
+
         $errors = $_SESSION['errors'];
         $_SESSION['errors'] = [];
 

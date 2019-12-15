@@ -1,7 +1,7 @@
 <?php /** @var \App\Data\Template\AppData $appData */ ?>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-2">
     <div class="container">
-        <a class="navbar-brand logo" href="/" target="_blank">Books App</a>
+        <a class="navbar-brand logo" href="index.php">Books App</a>
         <button class="navbar-toggler navbar-toggler-right"
                 type="button" data-toggle="collapse"
                 data-target="#navbarResponsive"
@@ -19,7 +19,7 @@
 
                 <?php if ($appData->isAdmin()): ?>
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Create Book</a>
+                    <a class="nav-link" href="create-book.php">Create Book</a>
                 </li>
                 <?php endif; ?>
 
