@@ -5,8 +5,8 @@ namespace App\Service\Book;
 
 
 use App\Data\BookDTO;
-use App\Exception\AppException;
 use App\Repository\Book\BookRepositoryInterface;
+use Core\Exception\AppException;
 
 class BookService implements BookServiceInterface
 {
@@ -25,6 +25,10 @@ class BookService implements BookServiceInterface
     }
 
 
+    /**
+     * @param BookDTO $book
+     * @throws AppException
+     */
     public function create(BookDTO $book)
     {
         try {
@@ -35,6 +39,10 @@ class BookService implements BookServiceInterface
 
     }
 
+    /**
+     * @param BookDTO $book
+     * @throws AppException
+     */
     public function edit(BookDTO $book)
     {
         try {
@@ -44,6 +52,10 @@ class BookService implements BookServiceInterface
         }
     }
 
+    /**
+     * @param int $id
+     * @throws AppException
+     */
     public function delete(int $id)
     {
         try {

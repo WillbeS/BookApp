@@ -5,15 +5,13 @@ namespace App\Service\User;
 
 
 use App\Data\RoleDTO;
-use App\Data\Template\CurrentUser;
 use App\Data\UserDTO;
-use App\Exception\AppException;
 use App\Exception\InvalidCredentialsException;
 use App\Exception\UserNotActiveException;
-use App\Exception\RegisterException;
 use App\Repository\Role\UsersRolesRepositoryInterface;
 use App\Repository\UserRepositoryInterface;
 use App\Service\Encryption\EncryptionServiceInterface;
+use Core\Exception\AppException;
 use Core\SessionInterface;
 
 class UserService implements UserServiceInterface

@@ -3,8 +3,8 @@
 namespace App\Data;
 
 
-use App\Exception\FormValidationException;
 use App\Traits\FormValidationTrait;
+use Core\Exception\FormValidationException;
 
 class UserDTO
 {
@@ -73,6 +73,7 @@ class UserDTO
     /**
      * @param string $firstName
      * @return UserDTO
+     * @throws FormValidationException
      * @throws FormValidationException
      */
     public function setFirstName(string $firstName): UserDTO
@@ -143,6 +144,7 @@ class UserDTO
     /**
      * @param string $password
      * @return UserDTO
+     * @throws FormValidationException
      * @throws FormValidationException
      */
     public function setPassword(string $password): UserDTO

@@ -5,12 +5,11 @@ namespace App\Http;
 
 
 use App\Data\UserDTO;
-use App\Exception\AppException;
 use App\Exception\InvalidCredentialsException;
 use App\Exception\UserNotActiveException;
-use App\Exception\RegisterException;
 use App\Service\User\UserServiceInterface;
 use Core\DataBinderInterface;
+use Core\Exception\AppException;
 use Core\SessionInterface;
 use Core\TemplateInterface;
 
@@ -67,9 +66,7 @@ class UserController extends AbstractController
     {
         if (isset($formData['login'])) {
             try {
-                $userDto = $this->handleLoginProcess($formData);
-                $this->session->setUserId($userDto->getId());
-                $this->session->setUserRoles($this->userService->getRoles());
+                $this->handleLoginProcess($formData);
                 $this->redirect('index.php');
             } catch (UserNotActiveException $exception) {
                 $this->addFlashError($exception->getMessage());
@@ -113,21 +110,17 @@ class UserController extends AbstractController
 
 
     // Private methods
-
     private function handleRegisterProcess(array $formData, UserDTO $user)
     {
-        $validationErrors = $this->dataBinder->bind($formData, $user);
-
-        foreach ($validationErrors as $error) {
-            $this->session->addError($error);
-        }
-
+        $this->dataBinder->bindFormDataWithValidation($formData, $user);
         $this->userService->register($user, $formData['confirm_password']);
     }
 
-    private function handleLoginProcess(array $formData): ?UserDTO
+    private function handleLoginProcess(array $formData)
     {
-         return $this->userService->login($formData['email'], $formData['password']);
+        $userDto = $this->userService->login($formData['email'], $formData['password']);
+        $this->session->setUserId($userDto->getId());
+        $this->session->setUserRoles($this->userService->getRoles());
     }
 
     private function handleEditProfileProcess(array $formData, UserDTO $userDTO): bool

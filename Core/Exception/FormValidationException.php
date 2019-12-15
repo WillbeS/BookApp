@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Exception;
+namespace Core\Exception;
 
 
 use Throwable;

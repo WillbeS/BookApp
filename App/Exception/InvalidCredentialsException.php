@@ -4,6 +4,7 @@
 namespace App\Exception;
 
 
+use Core\Exception\AppException;
 use Throwable;
 
 class InvalidCredentialsException extends AppException

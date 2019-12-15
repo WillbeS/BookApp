@@ -5,10 +5,10 @@ namespace App\Http;
 
 
 use App\Data\BookDTO;
-use App\Exception\AppException;
 use App\Service\Book\BookServiceInterface;
 use App\Traits\BookTrait;
 use Core\DataBinderInterface;
+use Core\Exception\AppException;
 use Core\SessionInterface;
 use Core\TemplateInterface;
 
@@ -47,7 +47,8 @@ class AdminController extends AbstractController
 
         if (isset($formData['create'])) {
             try {
-                $this->handleCreateProcess($formData, $book);
+                $this->dataBinder->bindFormDataWithValidation($formData, $book);
+                $this->bookService->create($book);
                 $this->addFlashMessage('Book successfully created');
                 $this->redirect('index.php');
             } catch (AppException $exception) {
@@ -67,7 +68,8 @@ class AdminController extends AbstractController
 
         if (isset($formData['edit'])) {
             try {
-                $this->handleEditProcess($formData, $book);
+                $this->dataBinder->bindFormDataWithValidation($formData, $book);
+                $this->bookService->edit($book);
                 $this->addFlashMessage('Book successfully edited');
                 $this->redirect('index.php');
             } catch (AppException $exception) {
@@ -93,18 +95,6 @@ class AdminController extends AbstractController
         }
 
         $this->redirect('index.php');
-    }
-
-    private function handleCreateProcess(array $formData, BookDTO $book)
-    {
-        $this->dataBinder->bind($formData, $book);
-        $this->bookService->create($book);
-    }
-
-    private function handleEditProcess(array $formData, BookDTO $book)
-    {
-        $this->dataBinder->bind($formData, $book);
-        $this->bookService->edit($book);
     }
 
     private function checkRights()

@@ -3,8 +3,10 @@
 namespace Core;
 
 
-use App\Exception\AppException;
-use App\Exception\FormValidationException;
+
+
+use Core\Exception\AppException;
+use Core\Exception\FormValidationException;
 
 class DataBinder implements DataBinderInterface
 {
@@ -44,5 +46,19 @@ class DataBinder implements DataBinderInterface
         return $errors;
     }
 
+    /**
+     * @param array $formData
+     * @param $object
+     * @throws AppException
+     */
+    public function bindFormDataWithValidation(array $formData, $object)
+    {
+        $validationErrors = $this->bind($formData, $object);
+
+        if (count($validationErrors ) > 0) {
+            $message = "You have validation errors in your form: \n" . implode("\n", $validationErrors);
+            throw new AppException($message);
+        }
+    }
 
 }
