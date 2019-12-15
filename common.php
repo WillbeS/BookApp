@@ -41,6 +41,9 @@ $adminController = new \App\Http\AdminController($template, $session, $bookServi
 //Home Controller Dependencies
 $homeController = new \App\Http\HomeController($template, $session, $bookService);
 
+//BookController
+$bookController = new \App\Http\BookController($template, $session, $bookService);
+
 
 //////////////////////////////////////////////////////////////////////////
 ////////////// TESTING ORM ///////////////////////////////////////////////

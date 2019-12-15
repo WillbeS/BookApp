@@ -6,22 +6,14 @@
     <?php foreach ($contentData as $book): ?>
         <div class="col-sm-3">
             <div class="card mr-3 mb-3 p-3">
-                <h3 class="h5"><?= $book->getName() ?></h3>
+                <a href="book.php?id=<?= $book->getId() ?>" title="<?= $book->getName() ?>">
+                    <h3 class="h5 text-center"><?= $book->getName() ?></h3>
+                </a>
                 <div class="card-body">
-                    <img class="img-fluid" src="<?= $book->getImage() ?>" />
+                    <a href="book.php?id=<?= $book->getId() ?>" title="<?= $book->getName() ?>">
+                        <img class="img-fluid" src="<?= $book->getImage() ?>" />
+                    </a>
                 </div>
-                <?php if ($appData->isAdmin()): ?>
-                    <div class="card-footer =">
-                        <a href="#"
-                           class="btn btn-outline-danger btn-sm float-right ml-2"
-                           data-toggle="popover"
-                           data-trigger="focus"
-                           data-content="Are you sure you want to delete this book? <div class='text-center'><a  href='delete-book.php?id=<?= $book->getId() ?>'>Delete!</a></div>">
-                            Delete
-                        </a>
-                        <a class="btn btn-outline-info btn-sm float-right" href="edit-book.php?id=<?= $book->getId() ?>">Edit</a>
-                    </div>
-                <?php endif; ?>
             </div>
         </div>
     <?php endforeach; ?>

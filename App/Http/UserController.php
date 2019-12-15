@@ -113,11 +113,11 @@ class UserController extends AbstractController
 
     // Private methods
 
-    private function handleRegisterProcess(array $formData, UserDTO $user): bool
+    private function handleRegisterProcess(array $formData, UserDTO $user)
     {
         $this->dataBinder->bind($formData, $user);
 
-        return $this->userService->register($user, $formData['confirm_password']);
+        $this->userService->register($user, $formData['confirm_password']);
     }
 
     private function handleLoginProcess(array $formData): ?UserDTO

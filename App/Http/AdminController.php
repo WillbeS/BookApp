@@ -7,12 +7,15 @@ namespace App\Http;
 use App\Data\BookDTO;
 use App\Exception\AppException;
 use App\Service\Book\BookServiceInterface;
+use App\Traits\BookTrait;
 use Core\DataBinderInterface;
 use Core\SessionInterface;
 use Core\TemplateInterface;
 
 class AdminController extends AbstractController
 {
+    use BookTrait;
+
     /**
      * @var BookServiceInterface
      */
@@ -102,23 +105,6 @@ class AdminController extends AbstractController
     {
         $this->dataBinder->bind($formData, $book);
         $this->bookService->edit($book);
-    }
-
-    private function getBookFromRequestData(array $getData): BookDTO
-    {
-        if (!isset($getData['id'])) {
-            $this->addFlashError('Invalid url.');
-            $this->redirect('index.php');
-        }
-
-        $book = $this->bookService->getBookById($getData['id']);
-
-        if (null == $book) {
-            $this->addFlashError('Invalid url');
-            $this->redirect('index.php');
-        }
-
-        return $book;
     }
 
     private function checkRights()

@@ -4,6 +4,7 @@
 namespace App\Http;
 
 
+use App\Data\BookDTO;
 use App\Data\Template\AppData;
 use Core\SessionInterface;
 use Core\TemplateInterface;
