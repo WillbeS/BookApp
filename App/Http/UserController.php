@@ -12,6 +12,7 @@ use Core\DataBinderInterface;
 use Core\Exception\AppException;
 use Core\SessionInterface;
 use Core\TemplateInterface;
+use http\Client\Curl\User;
 
 class UserController extends AbstractController
 {
@@ -87,7 +88,7 @@ class UserController extends AbstractController
         $this->redirect('index.php');
     }
 
-    public function editProfile(array $formData)
+    public function profile(array $formData)
     {
         if (!$this->userService->isLoggedIn()) {
             $this->redirect('login.php');
@@ -96,18 +97,27 @@ class UserController extends AbstractController
         $user = $this->userService->getCurrentUser();
 
         if (isset($formData['edit'])) {
-            if ($this->handleEditProfileProcess($formData, $user)) {
-                $this->redirect('index.php');
-            } else {
-                var_dump('Error'); //temp
-                //TODO - some error/messages handling
+            try {
+                $this->handleEditProfileProcess($formData, $user);
+                $this->addFlashMessage('Your changes were saved.');
+                $this->redirect('profile.php');
+            } catch (AppException $exception) {
+                $this->addFlashError($exception->getMessage());
+                $this->renderWithLayout('user/profile', $user);
+            }
+        } elseif (isset($formData['change_password'])) {
+            try {
+                $this->handleChangePasswordProcess($formData, $user);
+                $this->addFlashMessage('Your changes were saved.');
+                $this->redirect('profile.php');
+            } catch (AppException $exception) {
+                $this->addFlashError($exception->getMessage());
+                $this->renderWithLayout('user/profile', $user);
             }
         } else {
-            $this->render('user/edit_profile', $user);
+            $this->renderWithLayout('user/profile', $user);
         }
     }
-
-
 
     // Private methods
     private function handleRegisterProcess(array $formData, UserDTO $user)
@@ -125,10 +135,17 @@ class UserController extends AbstractController
 
     private function handleEditProfileProcess(array $formData, UserDTO $userDTO): bool
     {
-        $this->dataBinder->bind($formData, $userDTO);
-
-        //TODO - check for change password
-
+        $this->dataBinder->bindFormDataWithValidation($formData, $userDTO);
         return $this->userService->edit($userDTO);
+    }
+
+    private function handleChangePasswordProcess(array $formData, UserDTO $currentUser)
+    {
+        $this->userService->changePassword(
+            $formData['old_password'],
+            $formData['new_password'],
+            $formData['confirm_new_password'],
+            $currentUser
+        );
     }
 }

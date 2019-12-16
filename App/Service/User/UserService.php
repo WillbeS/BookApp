@@ -107,6 +107,31 @@ class UserService implements UserServiceInterface
     }
 
     /**
+     * @param string $oldPassword
+     * @param string $newPassword
+     * @param string $confirmNewPassword
+     * @param UserDTO $currentUser
+     * @return mixed|void
+     * @throws AppException
+     */
+    public function changePassword(string $oldPassword,
+                                   string $newPassword,
+                                   string $confirmNewPassword,
+                                   UserDTO $currentUser)
+    {
+        if (!$this->encryptionService->isValid($oldPassword, $currentUser->getPassword())) {
+            throw new AppException('Old password is not correct.');
+        }
+
+        if ($newPassword !== $confirmNewPassword) {
+            throw new AppException('Passwords mismatch.');
+        }
+
+        $currentUser->setHashedPassword($this->encryptionService->encrypt($newPassword));
+        return $this->userRepository->updateProfile($currentUser->getId(), $currentUser);
+    }
+
+    /**
      * @inheritDoc
      */
     public function getCurrentUser(): ?UserDTO

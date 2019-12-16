@@ -28,6 +28,18 @@ interface UserServiceInterface
     public function edit(UserDTO $userDTO): bool;
 
     /**
+     * @param string $oldPassword
+     * @param string $newPassword
+     * @param string $confirmNewPassword
+     * @param UserDTO $currentUser
+     * @return mixed
+     */
+    public function changePassword(string $oldPassword,
+                                   string $newPassword,
+                                   string $confirmNewPassword,
+                                   UserDTO $currentUser);
+
+    /**
      * @return UserDTO|null
      */
     public function getCurrentUser(): ?UserDTO;
@@ -42,5 +54,8 @@ interface UserServiceInterface
      */
     public function getAll(): \Generator;
 
+    /**
+     * @return array
+     */
     public function getRoles(): array;
 }
