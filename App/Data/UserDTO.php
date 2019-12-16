@@ -47,7 +47,6 @@ class UserDTO
     private $active;
 
 
-    //TODO - check if I really need  this
     public static function create(): UserDTO
     {
         return new UserDTO();

@@ -6,6 +6,10 @@ namespace App\Service\Book;
 
 use App\Data\BookDTO;
 
+/**
+ * Interface BookServiceInterface
+ * @package App\Service\Book
+ */
 interface BookServiceInterface
 {
     /**

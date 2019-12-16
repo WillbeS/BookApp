@@ -110,7 +110,7 @@ class AdminController extends AbstractController
     private function checkRights()
     {
         if (!$this->appData->isAdmin()) {
-            $this->redirect('index.php');
+            $this->redirect('login.php');
         }
     }
 }

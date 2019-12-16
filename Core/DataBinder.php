@@ -3,11 +3,13 @@
 namespace Core;
 
 
-
-
 use Core\Exception\AppException;
 use Core\Exception\FormValidationException;
 
+/**
+ * Class DataBinder
+ * @package Core
+ */
 class DataBinder implements DataBinderInterface
 {
     /**

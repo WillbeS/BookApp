@@ -5,6 +5,10 @@ namespace App\Service\User;
 
 use App\Data\UserDTO;
 
+/**
+ * Interface UserServiceInterface
+ * @package App\Service\User
+ */
 interface UserServiceInterface
 {
     /**

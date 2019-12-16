@@ -6,8 +6,16 @@ namespace App\Traits;
 
 use App\Data\BookDTO;
 
+/**
+ * Trait BookTrait
+ * @package App\Traits
+ */
 trait BookTrait
 {
+    /**
+     * @param array $getData
+     * @return BookDTO
+     */
     private function getBookFromRequestData(array $getData): BookDTO
     {
         if (!isset($getData['id'])) {

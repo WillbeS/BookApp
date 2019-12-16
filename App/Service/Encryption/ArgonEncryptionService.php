@@ -2,7 +2,10 @@
 
 namespace App\Service\Encryption;
 
-
+/**
+ * Class ArgonEncryptionService
+ * @package App\Service\Encryption
+ */
 class ArgonEncryptionService implements EncryptionServiceInterface
 {
     /**

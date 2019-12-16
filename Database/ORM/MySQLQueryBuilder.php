@@ -8,6 +8,10 @@ use Database\DatabaseInterface;
 use Database\ResultSetInterface;
 use Database\StatementInterface;
 
+/**
+ * Class MySQLQueryBuilder
+ * @package Database\ORM
+ */
 class MySQLQueryBuilder implements QueryBuilderInterface
 {
     /**
@@ -36,7 +40,10 @@ class MySQLQueryBuilder implements QueryBuilderInterface
         $this->executeParams = [];
     }
 
-
+    /**
+     * @param array $columns
+     * @return QueryBuilderInterface
+     */
     public function select(array $columns = []): QueryBuilderInterface
     {
         $query = 'SELECT ';
@@ -53,7 +60,10 @@ class MySQLQueryBuilder implements QueryBuilderInterface
         return $this;
     }
 
-
+    /**
+     * @param string $table
+     * @return QueryBuilderInterface
+     */
     public function from(string $table): QueryBuilderInterface
     {
         $this->query .= ' FROM ' . $table;
@@ -61,6 +71,10 @@ class MySQLQueryBuilder implements QueryBuilderInterface
         return $this;
     }
 
+    /**
+     * @param array $criteria
+     * @return QueryBuilderInterface
+     */
     public function where(array $criteria = []): QueryBuilderInterface
     {
         $query = $this->addWhereToQuery($criteria);
@@ -72,6 +86,10 @@ class MySQLQueryBuilder implements QueryBuilderInterface
         return $this;
     }
 
+    /**
+     * @param array $order
+     * @return QueryBuilderInterface
+     */
     public function orderBy(array $order = []): QueryBuilderInterface
     {
         $query = ' ORDER BY ';
@@ -88,7 +106,7 @@ class MySQLQueryBuilder implements QueryBuilderInterface
 
     public function limit(int $limit = null): QueryBuilderInterface
     {
-        //TODO - ricky because of that int shit
+        //TODO
     }
 
 
@@ -103,6 +121,10 @@ class MySQLQueryBuilder implements QueryBuilderInterface
         return $this;
     }
 
+    /**
+     * @param array $params
+     * @return QueryBuilderInterface
+     */
     public function setExecuteParams(array $params): QueryBuilderInterface
     {
         $this->executeParams = $params;
@@ -110,12 +132,19 @@ class MySQLQueryBuilder implements QueryBuilderInterface
         return $this;
     }
 
-
+    /**
+     * @return ResultSetInterface
+     */
     public function build(): ResultSetInterface
     {
         return $this->db->query($this->query)->execute($this->executeParams);
     }
 
+    /**
+     * @param string $table
+     * @param array $values
+     * @return int
+     */
     public function insert(string $table, array $values): int
     {
         $query = 'INSERT INTO ' . $table
@@ -130,6 +159,12 @@ class MySQLQueryBuilder implements QueryBuilderInterface
         return $this->db->getLastInsertId();
     }
 
+    /**
+     * @param string $table
+     * @param array $values
+     * @param array $where
+     * @return StatementInterface
+     */
     public function update(string $table, array $values, array $where = []): StatementInterface
     {
         $query = 'UPDATE ' . $table . ' SET ';
@@ -147,6 +182,11 @@ class MySQLQueryBuilder implements QueryBuilderInterface
         return $stmt;
     }
 
+    /**
+     * @param string $table
+     * @param array $where
+     * @return StatementInterface
+     */
     public function delete(string $table, array $where = []): StatementInterface
     {
         $query = 'DELETE FROM ' . $table . $this->addWhereToQuery($where);
@@ -159,6 +199,11 @@ class MySQLQueryBuilder implements QueryBuilderInterface
         return $stmt;
     }
 
+    /**
+     * @param string $table
+     * @param array $where
+     * @return int
+     */
     public function getRowsCount(string $table, array $where = []): int
     {
         $query = 'SELECT COUNT(*) FROM ' . $table . $this->addWhereToQuery($where);
@@ -168,11 +213,18 @@ class MySQLQueryBuilder implements QueryBuilderInterface
         return $resultSet->fetchColumn();
     }
 
+    /**
+     * @return string
+     */
     public function getQuery(): string
     {
         return $this->query;
     }
 
+    /**
+     * @param array $criteria
+     * @return string
+     */
     private function addWhereToQuery(array $criteria): string
     {
         if (count($criteria) < 1) {
@@ -190,6 +242,10 @@ class MySQLQueryBuilder implements QueryBuilderInterface
         return $query;
     }
 
+    /**
+     * @param array $columns
+     * @return array
+     */
     private function mapColumnsToProperties(array $columns): array
     {
         $properties = [];

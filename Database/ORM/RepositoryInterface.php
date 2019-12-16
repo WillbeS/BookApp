@@ -3,7 +3,10 @@
 
 namespace Database\ORM;
 
-
+/**
+ * Interface RepositoryInterface
+ * @package Database\ORM
+ */
 interface RepositoryInterface
 {
     /**

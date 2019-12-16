@@ -1,11 +1,14 @@
 <?php
 
-
 namespace Database\ORM;
 
 
 use ReflectionProperty;
 
+/**
+ * Class AbstractRepository
+ * @package Database\ORM
+ */
 abstract class AbstractRepository implements RepositoryInterface
 {
     /**
@@ -129,6 +132,9 @@ abstract class AbstractRepository implements RepositoryInterface
         return $builder->build()->fetchOne($this->entity);
     }
 
+    /**
+     * @return array
+     */
     protected function getAllColumns(): array
     {
         $columns = [];
@@ -197,6 +203,11 @@ abstract class AbstractRepository implements RepositoryInterface
         return $columns;
     }
 
+    /**
+     * @param ReflectionProperty $property
+     * @param object $object
+     * @return string|null
+     */
     private function getPropertyValue(ReflectionProperty $property, object $object): ?string
     {
         $getter = 'get' . ucfirst($property->getName());

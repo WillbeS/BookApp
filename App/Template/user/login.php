@@ -3,7 +3,7 @@
     <div class="row justify-content-md-center" id="login">
         <div class="col-sm-6 col-sm-offset-3 border border-primary p-3 pl-5 pr-5">
             <p class="h3 mb-3">Login</p>
-            <form method="post" novalidate="novalidate">
+            <form method="post">
                 <div class="form-group">
                     <label for="email" class="required">Email</label>
                     <input type="email" id="email" name="email" required="required" class="form-control" />

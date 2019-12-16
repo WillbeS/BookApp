@@ -28,6 +28,9 @@ class BookController extends AbstractController
         $this->bookService = $bookService;
     }
 
+    /**
+     * @param array $getData
+     */
     public function viewOne(array $getData)
     {
         $book = $this->getBookFromRequestData($getData);
@@ -46,6 +49,9 @@ class BookController extends AbstractController
         $this->renderWithLayout('book/list_by_user', $books);
     }
 
+    /**
+     * @param array $getData
+     */
     public function addToFavorite(array $getData)
     {
         $this->checkLoggedIn();
@@ -64,6 +70,9 @@ class BookController extends AbstractController
         $this->redirect('my-books.php');
     }
 
+    /**
+     * @param array $getData
+     */
     public function removeFromFavorite(array $getData)
     {
         $this->checkLoggedIn();

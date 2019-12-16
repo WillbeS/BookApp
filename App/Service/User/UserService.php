@@ -14,6 +14,10 @@ use App\Service\Encryption\EncryptionServiceInterface;
 use Core\Exception\AppException;
 use Core\SessionInterface;
 
+/**
+ * Class UserService
+ * @package App\Service\User
+ */
 class UserService implements UserServiceInterface
 {
     /**
@@ -37,6 +41,13 @@ class UserService implements UserServiceInterface
     protected $session;
 
 
+    /**
+     * UserService constructor.
+     * @param UserRepositoryInterface $userRepository
+     * @param UsersRolesRepositoryInterface $roleRepository
+     * @param EncryptionServiceInterface $encryptionService
+     * @param SessionInterface $session
+     */
     public function __construct(UserRepositoryInterface $userRepository,
                                 UsersRolesRepositoryInterface $roleRepository,
                                 EncryptionServiceInterface $encryptionService,
@@ -159,6 +170,9 @@ class UserService implements UserServiceInterface
         return $this->userRepository->findAll();
     }
 
+    /**
+     * @return array
+     */
     public function getRoles(): array
     {
         $currentUserId = $this->session->getUserId();

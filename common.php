@@ -45,28 +45,6 @@ $homeController = new \App\Http\HomeController($template, $session, $bookService
 $bookController = new \App\Http\BookController($template, $session, $bookService);
 
 
-//////////////////////////////////////////////////////////////////////////
-////////////// TESTING ORM ///////////////////////////////////////////////
-/// //////////////////////////////////////////////////////////////////////
-
-//
-//$newUSerRepository = new \App\Repository\UserRepository($builder);
-//
-//$user = \App\Data\UserDTO::create();
-//
-//$user->setFirstName('plam2Edited')
-//    ->setLastName('hhh')
-//    ->setEmail('email4')
-//    ->setPassword('pass')
-//    ->setActive(true);
-//
-////$newUSerRepository->insert($user);
-//var_dump($newUSerRepository->findByEmail('email4'));
-//
-//echo '------------------------------------------------------';
-
-////////////////////////////////////////////////////////////////////////////
-
 
 
 

@@ -6,11 +6,15 @@ namespace App\Repository;
 
 use App\Data\UserDTO;
 
+/**
+ * Interface UserRepositoryInterface
+ * @package App\Repository
+ */
 interface UserRepositoryInterface
 {
     /**
      * @param UserDTO $userDTO
-     * @return bool
+     * @return int
      */
     public function insert(UserDTO $userDTO): int;
 

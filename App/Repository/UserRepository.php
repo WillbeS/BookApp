@@ -8,6 +8,10 @@ use App\Data\UserDTO;
 use Database\ORM\AbstractRepository;
 use Database\ORM\QueryBuilderInterface;
 
+/**
+ * Class UserRepository
+ * @package App\Repository
+ */
 class UserRepository extends AbstractRepository implements UserRepositoryInterface
 {
     public function __construct(QueryBuilderInterface $queryBuilder)

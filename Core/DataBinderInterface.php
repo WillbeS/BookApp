@@ -2,7 +2,10 @@
 
 namespace Core;
 
-
+/**
+ * Interface DataBinderInterface
+ * @package Core
+ */
 interface DataBinderInterface
 {
     /**

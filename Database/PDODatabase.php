@@ -4,6 +4,10 @@ namespace Database;
 
 use PDO;
 
+/**
+ * Class PDODatabase
+ * @package Database
+ */
 class PDODatabase implements DatabaseInterface
 {
     /**
@@ -11,6 +15,14 @@ class PDODatabase implements DatabaseInterface
      */
     private $pdo;
 
+    /**
+     * PDODatabase constructor.
+     * @param string $host
+     * @param string $db
+     * @param string $user
+     * @param string $pass
+     * @param string $charset
+     */
     public function __construct(string $host,
                                 string $db,
                                 string $user,
@@ -27,6 +39,12 @@ class PDODatabase implements DatabaseInterface
         $this->connect($dsn, $user, $pass, $options);
     }
 
+    /**
+     * @param $dsn
+     * @param $user
+     * @param $pass
+     * @param $options
+     */
     private function connect($dsn, $user, $pass, $options)
     {
         try {
@@ -36,12 +54,19 @@ class PDODatabase implements DatabaseInterface
         }
     }
 
+    /**
+     * @param string $query
+     * @return StatementInterface
+     */
     public function query(string $query): StatementInterface
     {
         $stmt = $this->pdo->prepare($query);
         return new PDOStatement($stmt);
     }
 
+    /**
+     * @return int
+     */
     public function getLastInsertId(): int
     {
         return $this->pdo->lastInsertId();

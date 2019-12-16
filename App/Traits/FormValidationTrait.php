@@ -5,8 +5,10 @@ namespace App\Traits;
 
 use Core\Exception\FormValidationException;
 
-
-//TODO - decide if better use abstract DTO class instead
+/**
+ * Trait FormValidationTrait
+ * @package App\Traits
+ */
 trait FormValidationTrait
 {
     /**

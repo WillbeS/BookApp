@@ -8,6 +8,10 @@ use App\Data\BookDTO;
 use App\Repository\Book\BookRepositoryInterface;
 use Core\Exception\AppException;
 
+/**
+ * Class BookService
+ * @package App\Service\Book
+ */
 class BookService implements BookServiceInterface
 {
     /**
@@ -65,11 +69,19 @@ class BookService implements BookServiceInterface
         }
     }
 
+    /**
+     * @param int $limit
+     * @return \Generator
+     */
     public function getLatest(int $limit): \Generator
     {
         return $this->bookRepository->findAll();
     }
 
+    /**
+     * @param int $id
+     * @return BookDTO|null
+     */
     public function getBookById(int $id): ?BookDTO
     {
         /** @var BookDTO $book */
@@ -93,11 +105,21 @@ class BookService implements BookServiceInterface
         $this->bookRepository->addBookToCollection($bookId, $userId);
     }
 
+    /**
+     * @param int $bookId
+     * @param int $userId
+     * @return mixed|void
+     */
     public function removeBookFromUserCollection(int $bookId, int $userId)
     {
         $this->bookRepository->removeBookFromCollection($bookId, $userId);
     }
 
+    /**
+     * @param $bookId
+     * @param null $userId
+     * @return bool
+     */
     public function bookIsInCollection($bookId, $userId = null): bool
     {
         if (null == $userId) {

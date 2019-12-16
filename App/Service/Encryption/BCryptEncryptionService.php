@@ -2,7 +2,10 @@
 
 namespace App\Service\Encryption;
 
-
+/**
+ * Class BCryptEncryptionService
+ * @package App\Service\Encryption
+ */
 class BCryptEncryptionService implements EncryptionServiceInterface
 {
     /**

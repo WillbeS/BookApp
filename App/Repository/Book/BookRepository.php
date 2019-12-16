@@ -15,6 +15,10 @@ class BookRepository extends AbstractRepository implements BookRepositoryInterfa
         parent::__construct(BookDTO::class, 'books', 'id', $queryBuilder);
     }
 
+    /**
+     * @param BookDTO $book
+     * @return int
+     */
     public function insert(BookDTO $book): int
     {
         $values = $this->mapObjectPropertiesToColumns($book);
@@ -22,6 +26,10 @@ class BookRepository extends AbstractRepository implements BookRepositoryInterfa
         return $this->queryBuilder->insert($this->table, $values);
     }
 
+    /**
+     * @param BookDTO $book
+     * @return mixed|void
+     */
     public function update(BookDTO $book)
     {
         $values = $this->mapObjectPropertiesToColumns($book);
@@ -29,6 +37,10 @@ class BookRepository extends AbstractRepository implements BookRepositoryInterfa
         $this->queryBuilder->update($this->table, $values, ['id' => $book->getId()]);
     }
 
+    /**
+     * @param int $id
+     * @return mixed|void
+     */
     public function delete(int $id)
     {
         $this->queryBuilder->delete($this->table, ['id' => $id]);
@@ -63,7 +75,10 @@ class BookRepository extends AbstractRepository implements BookRepositoryInterfa
         return $this->queryBuilder->getRowsCount('users_books', ['user_id' => $userId, 'book_id' => $bookId]);
     }
 
-
+    /**
+     * @param int $userId
+     * @return \Generator
+     */
     public function findBooksByUser(int $userId): \Generator
     {
         $query = "SELECT b.id, b.name, b.isbn, b.description, b.image 

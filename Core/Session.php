@@ -3,7 +3,10 @@
 
 namespace Core;
 
-
+/**
+ * Class Session
+ * @package Core
+ */
 class Session implements SessionInterface
 {
 
@@ -30,6 +33,9 @@ class Session implements SessionInterface
         return null;
     }
 
+    /**
+     * @return array
+     */
     public function getMessages(): array
     {
         if (!isset($_SESSION['messages'])) {
@@ -42,6 +48,9 @@ class Session implements SessionInterface
         return $messages;
     }
 
+    /**
+     * @return array
+     */
     public function getErrors(): array
     {
         if (!isset($_SESSION['errors'])) {
@@ -54,6 +63,10 @@ class Session implements SessionInterface
         return $errors;
     }
 
+    /**
+     * @param string $message
+     * @return SessionInterface
+     */
     public function addMessage(string $message): SessionInterface
     {
         $_SESSION['messages'][] = $message;
@@ -61,6 +74,10 @@ class Session implements SessionInterface
         return $this;
     }
 
+    /**
+     * @param string $error
+     * @return SessionInterface
+     */
     public function addError(string $error): SessionInterface
     {
         $_SESSION['errors'][] = $error;
@@ -68,6 +85,10 @@ class Session implements SessionInterface
         return $this;
     }
 
+    /**
+     * @param array $roles
+     * @return SessionInterface
+     */
     public function setUserRoles(array $roles): SessionInterface
     {
         $_SESSION['userRoles'] = $roles;
@@ -75,6 +96,9 @@ class Session implements SessionInterface
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getUserRoles(): array
     {
         if (!isset($_SESSION['userRoles'])) {

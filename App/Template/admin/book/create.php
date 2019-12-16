@@ -34,4 +34,3 @@
         </div>
     </div>
 </div>
-<p class="text-center">If you don't have an account: <a href="register.php">Register</a> from here!</p>

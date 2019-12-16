@@ -4,9 +4,13 @@ namespace Database;
 
 use Generator;
 
+/**
+ * Interface ResultSetInterface
+ * @package Database
+ */
 interface ResultSetInterface
 {
-    public function fetch($className):Generator;
+//    public function fetch($className):Generator;
 
     /**
      * @param string $className

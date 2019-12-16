@@ -12,7 +12,6 @@ use Core\DataBinderInterface;
 use Core\Exception\AppException;
 use Core\SessionInterface;
 use Core\TemplateInterface;
-use http\Client\Curl\User;
 
 class UserController extends AbstractController
 {
@@ -45,6 +44,9 @@ class UserController extends AbstractController
     }
 
 
+    /**
+     * @param array $formData
+     */
     public function register(array $formData)
     {
         $user = UserDTO::create();
@@ -63,6 +65,9 @@ class UserController extends AbstractController
         }
     }
 
+    /**
+     * @param array $formData
+     */
     public function login(array $formData)
     {
         if (isset($formData['login'])) {
@@ -88,6 +93,9 @@ class UserController extends AbstractController
         $this->redirect('index.php');
     }
 
+    /**
+     * @param array $formData
+     */
     public function profile(array $formData)
     {
         if (!$this->userService->isLoggedIn()) {
@@ -96,36 +104,39 @@ class UserController extends AbstractController
 
         $user = $this->userService->getCurrentUser();
 
-        if (isset($formData['edit'])) {
-            try {
+        try {
+            if (isset($formData['edit'])) {
                 $this->handleEditProfileProcess($formData, $user);
                 $this->addFlashMessage('Your changes were saved.');
                 $this->redirect('profile.php');
-            } catch (AppException $exception) {
-                $this->addFlashError($exception->getMessage());
-                $this->renderWithLayout('user/profile', $user);
-            }
-        } elseif (isset($formData['change_password'])) {
-            try {
+            } elseif (isset($formData['change_password'])) {
                 $this->handleChangePasswordProcess($formData, $user);
                 $this->addFlashMessage('Your changes were saved.');
                 $this->redirect('profile.php');
-            } catch (AppException $exception) {
-                $this->addFlashError($exception->getMessage());
+            } else {
                 $this->renderWithLayout('user/profile', $user);
             }
-        } else {
+        } catch (AppException $exception) {
+            $this->addFlashError($exception->getMessage());
             $this->renderWithLayout('user/profile', $user);
         }
     }
 
     // Private methods
+
+    /**
+     * @param array $formData
+     * @param UserDTO $user
+     */
     private function handleRegisterProcess(array $formData, UserDTO $user)
     {
         $this->dataBinder->bindFormDataWithValidation($formData, $user);
         $this->userService->register($user, $formData['confirm_password']);
     }
 
+    /**
+     * @param array $formData
+     */
     private function handleLoginProcess(array $formData)
     {
         $userDto = $this->userService->login($formData['email'], $formData['password']);
@@ -133,12 +144,21 @@ class UserController extends AbstractController
         $this->session->setUserRoles($this->userService->getRoles());
     }
 
+    /**
+     * @param array $formData
+     * @param UserDTO $userDTO
+     * @return bool
+     */
     private function handleEditProfileProcess(array $formData, UserDTO $userDTO): bool
     {
         $this->dataBinder->bindFormDataWithValidation($formData, $userDTO);
         return $this->userService->edit($userDTO);
     }
 
+    /**
+     * @param array $formData
+     * @param UserDTO $currentUser
+     */
     private function handleChangePasswordProcess(array $formData, UserDTO $currentUser)
     {
         $this->userService->changePassword(

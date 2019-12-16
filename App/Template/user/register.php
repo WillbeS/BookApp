@@ -3,7 +3,7 @@
     <div class="row justify-content-md-center" id="login">
         <div class="col-sm-6 col-sm-offset-3 border border-primary p-3 pl-5 pr-5">
             <p class="h3 mb-3">Register</p>
-            <form method="post" novalidate="novalidate">
+            <form method="post">
                 <div class="form-group">
                     <label for="first_name" class="required">First name</label>
                     <input type="text" id="first_name" name="first_name" required="required" class="form-control"

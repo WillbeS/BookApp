@@ -6,6 +6,10 @@ use App\Data\RoleDTO;
 use Database\ORM\AbstractRepository;
 use Database\ORM\QueryBuilderInterface;
 
+/**
+ * Class RoleRepository
+ * @package App\Repository\Role
+ */
 class RoleRepository extends AbstractRepository implements UsersRolesRepositoryInterface
 {
     public function __construct(QueryBuilderInterface $queryBuilder)
@@ -13,6 +17,11 @@ class RoleRepository extends AbstractRepository implements UsersRolesRepositoryI
         parent::__construct(RoleDTO::class, 'roles', 'id', $queryBuilder);
     }
 
+    /**
+     * @param int $userId
+     * @param int $roleId
+     * @return bool
+     */
     public function addRoleToUser(int $userId, int $roleId): bool
     {
         $this->queryBuilder->insert('users_roles', ['user_id' => $userId, 'role_id' => $roleId]);
@@ -20,6 +29,10 @@ class RoleRepository extends AbstractRepository implements UsersRolesRepositoryI
         return true;
     }
 
+    /**
+     * @param int $userId
+     * @return \Generator
+     */
     public function findRolesByUser(int $userId): \Generator
     {
         $query = "SELECT r.id, r.name 

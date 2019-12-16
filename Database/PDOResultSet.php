@@ -4,6 +4,10 @@ namespace Database;
 
 use Generator;
 
+/**
+ * Class PDOResultSet
+ * @package Database
+ */
 class PDOResultSet implements ResultSetInterface
 {
     /**
@@ -12,18 +16,21 @@ class PDOResultSet implements ResultSetInterface
     private $pdoStatement;
 
 
+    /**
+     * PDOResultSet constructor.
+     * @param \PDOStatement $statement
+     */
     public function __construct(\PDOStatement $statement)
     {
         $this->pdoStatement = $statement;
     }
 
-    //TODO - delete this when safe
-    public function fetch($className): \Generator
-    {
-        while ($row = $this->pdoStatement->fetchObject($className)) {
-            yield $row;
-        }
-    }
+//    public function fetch($className): \Generator
+//    {
+//        while ($row = $this->pdoStatement->fetchObject($className)) {
+//            yield $row;
+//        }
+//    }
 
     /**
      * @inheritDoc

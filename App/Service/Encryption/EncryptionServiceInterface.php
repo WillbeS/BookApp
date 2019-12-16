@@ -3,7 +3,10 @@
 
 namespace App\Service\Encryption;
 
-
+/**
+ * Interface EncryptionServiceInterface
+ * @package App\Service\Encryption
+ */
 interface EncryptionServiceInterface
 {
     /**
