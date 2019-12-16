@@ -21,9 +21,18 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="create-book.php">Create Book</a>
                 </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="create-book.php">Users</a>
+                    </li>
                 <?php endif; ?>
 
                 <?php if ($appData->getSession()->getUserId()): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my-books.php">My Books</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.php">Profile</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="logout.php">Logout</a>
                     </li>

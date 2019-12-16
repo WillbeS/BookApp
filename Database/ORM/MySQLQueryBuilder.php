@@ -159,6 +159,14 @@ class MySQLQueryBuilder implements QueryBuilderInterface
         return $stmt;
     }
 
+    public function getRowsCount(string $table, array $where = []): int
+    {
+        $query = 'SELECT COUNT(*) FROM ' . $table . $this->addWhereToQuery($where);
+        $stmt = $this->db->query($query);
+        $resultSet = $stmt->execute(array_values($where));
+
+        return $resultSet->fetchColumn();
+    }
 
     public function getQuery(): string
     {

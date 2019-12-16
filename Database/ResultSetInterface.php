@@ -19,4 +19,9 @@ interface ResultSetInterface
      * @return object
      */
     public function fetchOne(string $className): ?object;
+
+    /**
+     * @return int
+     */
+    public function fetchColumn(): int;
 }

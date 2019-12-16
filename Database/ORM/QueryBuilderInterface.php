@@ -19,7 +19,6 @@ interface QueryBuilderInterface
 
     public function limit(int $limit = null): QueryBuilderInterface;
 
-
     public function build(): ResultSetInterface;
 
     public function insert(string $table, array $values): int;
@@ -27,6 +26,8 @@ interface QueryBuilderInterface
     public function update(string $table, array $values, array $where = []): StatementInterface;
 
     public function delete(string $table, array $where = []): StatementInterface;
+
+    public function getRowsCount(string $table, array $where = []): int;
 
     public function setQuery(string $query): QueryBuilderInterface;
 

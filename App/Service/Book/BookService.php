@@ -77,4 +77,37 @@ class BookService implements BookServiceInterface
 
         return $book;
     }
+
+    /**
+     * @param int $bookId
+     * @param int $userId
+     * @return mixed|void
+     * @throws AppException
+     */
+    public function addBookToUserCollection(int $bookId, int $userId)
+    {
+        if ($this->bookIsInCollection($bookId, $userId)) {
+            throw new AppException('The book is already added to your collection.');
+        }
+
+        $this->bookRepository->addBookToCollection($bookId, $userId);
+    }
+
+    public function removeBookFromUserCollection(int $bookId, int $userId)
+    {
+        $this->bookRepository->removeBookFromCollection($bookId, $userId);
+    }
+
+    public function bookIsInCollection($bookId, $userId): bool
+    {
+        return $this->bookRepository->getCountByUserAndBook($bookId, $userId) > 0;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getBooksByUser(int $userId): \Generator
+    {
+        return $this->bookRepository->findBooksByUser($userId);
+    }
 }

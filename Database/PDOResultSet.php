@@ -44,4 +44,14 @@ class PDOResultSet implements ResultSetInterface
 
         return $result ? $result : null;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function fetchColumn(): int
+    {
+        $result = $this->pdoStatement->fetchColumn();
+
+        return $result ? $result : 0;
+    }
 }
