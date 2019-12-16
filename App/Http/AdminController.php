@@ -38,7 +38,9 @@ class AdminController extends AbstractController
         $this->dataBinder = $dataBinder;
     }
 
-
+    /**
+     * @param array $formData
+     */
     public function createBook(array $formData)
     {
         $this->checkRights();
@@ -60,6 +62,10 @@ class AdminController extends AbstractController
         }
     }
 
+    /**
+     * @param array $getData
+     * @param array $formData
+     */
     public function editBook(array  $getData, array $formData)
     {
         $this->checkRights();
@@ -81,6 +87,9 @@ class AdminController extends AbstractController
         }
     }
 
+    /**
+     * @param array $getData
+     */
     public function deleteBook(array  $getData)
     {
         $this->checkRights();
@@ -96,6 +105,7 @@ class AdminController extends AbstractController
 
         $this->redirect('index.php');
     }
+
 
     private function checkRights()
     {

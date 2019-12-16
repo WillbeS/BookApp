@@ -4,20 +4,24 @@
 namespace App\Data;
 
 
-use App\Exception\FormValidationException;
 use App\Traits\FormValidationTrait;
+use Core\Exception\FormValidationException;
 
 class BookDTO
 {
     use FormValidationTrait;
 
+    const MIN_NAME_LENGTH = 3;
+
+    const MAX_NAME_LENGTH = 100;
+
     const MIN_TEXT_LENGTH = 3;
 
-    const MAX_TEXT_LENGTH = 100;
+    const MAX_TEXT_LENGTH = 1000;
 
     const MIN_IMAGE_URL = 5;
 
-    const MAX_IMAGE_URL = 100;
+    const MAX_IMAGE_URL = 200;
 
     const MIN_ISBN_LENGTH = 10;
 
@@ -73,7 +77,7 @@ class BookDTO
      */
     public function setName(string $name): BookDTO
     {
-        $this->validateLength($name, 'Book name', self::MIN_TEXT_LENGTH, self::MAX_TEXT_LENGTH);
+        $this->validateLength($name, 'Book name', self::MIN_NAME_LENGTH, self::MAX_NAME_LENGTH);
 
         $this->name = $name;
 

@@ -98,8 +98,12 @@ class BookService implements BookServiceInterface
         $this->bookRepository->removeBookFromCollection($bookId, $userId);
     }
 
-    public function bookIsInCollection($bookId, $userId): bool
+    public function bookIsInCollection($bookId, $userId = null): bool
     {
+        if (null == $userId) {
+            return false;
+        }
+
         return $this->bookRepository->getCountByUserAndBook($bookId, $userId) > 0;
     }
 

@@ -18,11 +18,8 @@
                 </li>
 
                 <?php if ($appData->isAdmin()): ?>
-                <li class="nav-item active">
-                    <a class="nav-link" href="create-book.php">Create Book</a>
-                </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="create-book.php">Users</a>
+                        <a class="nav-link" href="create-book.php">Add Book</a>
                     </li>
                 <?php endif; ?>
 

@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <th>Description:</th>
-                        <td><?= $contentData->getBook()->getDescription() ?></td>
+                        <td><?= nl2br($contentData->getBook()->getDescription()) ?></td>
                     </tr>
                 </table>
             </div>

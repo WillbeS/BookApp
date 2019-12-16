@@ -57,7 +57,7 @@ interface BookServiceInterface
      * @param $userId
      * @return bool
      */
-    public function bookIsInCollection($bookId, $userId): bool;
+    public function bookIsInCollection($bookId, $userId = null): bool;
 
     /**
      * @param int $userId

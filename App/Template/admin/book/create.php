@@ -3,7 +3,7 @@
     <div class="row justify-content-md-center">
         <div class="col-sm-8 col-sm-offset-2 border border-primary p-3 pl-5 pr-5">
             <p class="h3 mb-3">Create Book</p>
-            <form method="post" novalidate="novalidate">
+            <form method="post">
                 <div class="form-group">
                     <label for="name" class="required">Name</label>
                     <input type="text" id="name" name="name" required="required" class="form-control"
